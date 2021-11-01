@@ -6,6 +6,18 @@ Process to install using UPI with internal Load balancer
 ```
 curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.6.49/openshift-install-linux-4.6.49.tar.gz
 tar -zxvf openshift-install-linux-4.6.49.tar.gz 
+
+
+curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.6.47/openshift-client-mac-4.6.47.tar.gz
+tar -zxvf openshift-client-mac-4.6.47.tar.gz
+
+curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.6.47/openshift-install-mac-4.6.47.tar.gz
+
+tar -zxvf openshift-install-mac-4.6.47.tar.gz
+
+
+curl -LO curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.6.47/openshift-install-linux-4.6.47.tar.gz
+tar -zxvf openshift-install-linux-4.6.47.tar.gz
 ```
 
 # Download oc, kubectl client
@@ -28,8 +40,138 @@ openstack image create --container-format=bare --disk-format=qcow2 --file rhcos-
 ```
 openstack network list
 
-NETWORK_ID="58439661-2a6f-4698-8364-0a4910830c58"
-openstack floating ip create --description "API ocpinternallb.zerotodevops.com" ${NETWORK_ID}
-openstack floating ip create --description "Ingress ocpinternallb.zerotodevops.com" ${NETWORK_ID}
-openstack floating ip create --description "bootstrap machine for ocpinternallb" ${NETWORK_ID}
+## NETWORK_ID="58439661-2a6f-4698-8364-0a4910830c58"
+
+NETWORK_ID="d67dceab-43df-4332-9447-654b32d81193"
+openstack floating ip create --description "demotel API" ${NETWORK_ID}
+- 192.168.50.229
+openstack floating ip create --description "demotel Ingress" ${NETWORK_ID}
+- 192.168.50.238
+openstack floating ip create --description "demotel Bootstrap" ${NETWORK_ID}
+- 192.168.50.202
+```
+
+
+## Prepare ignition config
+```
+./openshift-install create install-config --dir=install-dir
+./openshift-install create manifests --dir=install-dir
+rm -f openshift/99_openshift-cluster-api_master-machines-*.yaml openshift/99_openshift-cluster-api_worker-machineset-*.yaml
+./openshift-install create ignition-configs --dir=install-dir 
+```
+
+## Preparing the bootstrap Ignition files
+
+```
+import base64
+import json
+import os
+
+with open('bootstrap.ign', 'r') as f:
+    ignition = json.load(f)
+
+files = ignition['storage'].get('files', [])
+
+infra_id = os.environ.get('INFRA_ID', 'openshift').encode()
+hostname_b64 = base64.standard_b64encode(infra_id + b'-bootstrap\n').decode().strip()
+files.append(
+{
+    'path': '/etc/hostname',
+    'mode': 420,
+    'contents': {
+        'source': 'data:text/plain;charset=utf-8;base64,' + hostname_b64
+    }
+})
+
+ca_cert_path = os.environ.get('OS_CACERT', '')
+if ca_cert_path:
+    with open(ca_cert_path, 'r') as f:
+        ca_cert = f.read().encode()
+        ca_cert_b64 = base64.standard_b64encode(ca_cert).decode().strip()
+
+    files.append(
+    {
+        'path': '/opt/openshift/tls/cloud-ca-cert.pem',
+        'mode': 420,
+        'contents': {
+            'source': 'data:text/plain;charset=utf-8;base64,' + ca_cert_b64
+        }
+    })
+
+ignition['storage']['files'] = files;
+
+with open('bootstrap.ign', 'w') as f:
+    json.dump(ignition, f)
+```
+
+```
+
+xargs -n 1 curl -O <<< '
+        https://raw.githubusercontent.com/openshift/installer/release-4.6/upi/openstack/bootstrap.yaml
+        https://raw.githubusercontent.com/openshift/installer/release-4.6/upi/openstack/common.yaml
+        https://raw.githubusercontent.com/openshift/installer/release-4.6/upi/openstack/compute-nodes.yaml
+        https://raw.githubusercontent.com/openshift/installer/release-4.6/upi/openstack/control-plane.yaml
+        https://raw.githubusercontent.com/openshift/installer/release-4.6/upi/openstack/inventory.yaml
+        https://raw.githubusercontent.com/openshift/installer/release-4.6/upi/openstack/network.yaml
+        https://raw.githubusercontent.com/openshift/installer/release-4.6/upi/openstack/security-groups.yaml
+        https://raw.githubusercontent.com/openshift/installer/release-4.6/upi/openstack/down-bootstrap.yaml
+        https://raw.githubusercontent.com/openshift/installer/release-4.6/upi/openstack/down-compute-nodes.yaml
+        https://raw.githubusercontent.com/openshift/installer/release-4.6/upi/openstack/down-control-plane.yaml
+        https://raw.githubusercontent.com/openshift/installer/release-4.6/upi/openstack/down-load-balancers.yaml
+        https://raw.githubusercontent.com/openshift/installer/release-4.6/upi/openstack/down-network.yaml
+        https://raw.githubusercontent.com/openshift/installer/release-4.6/upi/openstack/down-security-groups.yaml
+        https://raw.githubusercontent.com/openshift/installer/release-4.6/upi/openstack/down-containers.yaml'
+
+
+ansible-playbook -i inventory.yaml security-groups.yaml
+ansible-playbook -i inventory.yaml network.yaml
+openstack quota set --secgroups 300 --secgroup-rules 1000 admin
+```
+
+```
+export INFRA_ID=$(jq -r .infraID metadata.json)
+openstack console log show "$INFRA_ID-bootstrap"
+openshift-install wait-for bootstrap-complete
+```
+
+## Bootstrap Image
+```
+openstack image create --disk-format=raw --container-format=bare --file bootstrap.ign ocp-$INFRA_ID-bootstrap.ign
+openstack image show ocp-4.9-bootstrap.ign
+openstack catalog show image
+```
+
+```
+openstack token issue -c id -f value
+vim $INFRA_ID-bootstrap-ignition.json
+```
+
+```
+{
+  "ignition": {
+    "config": {
+      "merge": [{
+        "source": "http://192.168.50.20:9292/v2/images/34f57575-5886-4877-9510-eb6b04bb7640/file", 
+        "httpHeaders": [{
+          "name": "X-Auth-Token", 
+          "value": "gAAAAABhgGqG6oibUQuLWBkihQ4zwjTT8llMLNOirnKyefZUmMR5iplTPqzKiTOIEFiV5chnWRXsqH-y5k02Tg-N5hiJqn1lLEunSat7A1o5xMqH9qlvPzIyMioAG2XMCbrIk9yN92TL4vfj6LVrtC_Z8bRruGH3fxxAAVMlAwV-w5SXBvgG4wY" 
+        }]
+      }]
+    }
+}
+```
+
+## Control plane ignition config
+```
+for index in $(seq 0 2); do
+    MASTER_HOSTNAME="$INFRA_ID-master-$index\n"
+    python -c "import base64, json, sys;
+ignition = json.load(sys.stdin);
+storage = ignition.get('storage', {});
+files = storage.get('files', []);
+files.append({'path': '/etc/hostname', 'mode': 420, 'contents': {'source': 'data:text/plain;charset=utf-8;base64,' + base64.standard_b64encode(b'$MASTER_HOSTNAME').decode().strip(), 'verification': {}}, 'filesystem': 'root'});
+storage['files'] = files;
+ignition['storage'] = storage
+json.dump(ignition, sys.stdout)" <master.ign >"$INFRA_ID-master-$index-ignition.json"
+done
 ```
