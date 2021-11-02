@@ -33,7 +33,7 @@ if ca_cert_path:
         }
     })
 
-keepalived_path = "/Users/bpandey/Documents/workspace/inprogress/customer/telus/upi-with-internal-lb/master2/static-pod-resources/keepalived/keepalived.conf.tmpl"
+keepalived_path = "../static-pod-resources/keepalived/keepalived.conf.tmpl"
 if keepalived_path:
     with open(keepalived_path, 'r') as f:
         keepalived_conf = f.read().encode()
@@ -48,6 +48,42 @@ if keepalived_path:
         },
         'contents': {
             'source': 'data:text/plain;charset=utf-8;base64,' + keepalived_conf_b64
+        }
+    })
+
+haproxy_path = "../static-pod-resources/haproxy/haproxy.cfg.tmpl"
+if haproxy_path:
+    with open(haproxy_path, 'r') as f:
+        haproxy_conf = f.read().encode()
+        haproxy_conf_b64 = base64.standard_b64encode(haproxy_conf).decode().strip()
+
+    files.append(
+    {
+        'path': '/etc/kubernetes/static-pod-resources/haproxy/haproxy.cfg.tmpl',
+        'mode': 644,
+        'user': {
+            'name': 'root'
+        },
+        'contents': {
+            'source': 'data:text/plain;charset=utf-8;base64,' + haproxy_conf_b64
+        }
+    })
+
+mdns_path = "../static-pod-resources/mdns/config.hcl.tmpl"
+if mdns_path:
+    with open(mdns_path, 'r') as f:
+        mdns_conf = f.read().encode()
+        mdns_conf_b64 = base64.standard_b64encode(mdns_conf).decode().strip()
+
+    files.append(
+    {
+        'path': '/etc/kubernetes/static-pod-resources/mdns/config.hcl.tmpl',
+        'mode': 644,
+        'user': {
+            'name': 'root'
+        },
+        'contents': {
+            'source': 'data:text/plain;charset=utf-8;base64,' + mdns_conf_b64
         }
     })
 
