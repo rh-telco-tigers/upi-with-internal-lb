@@ -40,15 +40,20 @@ openstack image create --container-format=bare --disk-format=qcow2 --file rhcos-
 ```
 openstack network list
 
-## NETWORK_ID="58439661-2a6f-4698-8364-0a4910830c58"
-
-NETWORK_ID="d67dceab-43df-4332-9447-654b32d81193"
+NETWORK_ID="58439661-2a6f-4698-8364-0a4910830c58"
 openstack floating ip create --description "demotel API" ${NETWORK_ID}
-- 192.168.50.229
 openstack floating ip create --description "demotel Ingress" ${NETWORK_ID}
-- 192.168.50.238
 openstack floating ip create --description "demotel Bootstrap" ${NETWORK_ID}
-- 192.168.50.202
+
+
+# demotelbm
+NETWORK_ID="58439661-2a6f-4698-8364-0a4910830c58"
+openstack floating ip create --description "demotelbm API" ${NETWORK_ID}
+- 192.168.5.155
+openstack floating ip create --description "demotelbm Ingress" ${NETWORK_ID}
+- 192.168.5.93
+openstack floating ip create --description "demotelbm Bootstrap" ${NETWORK_ID}
+- 192.168.5.184
 ```
 
 
