@@ -25,6 +25,8 @@ spec:
       path: "/"
   containers:
   - name: haproxy
+    securityContext:
+      privileged: true
     image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:555efd05a7c11ebd96922a0541556781e093fb7be09aed2b3d6f7973982e1a88
     env:
       - name: OLD_HAPROXY_PS_FORCE_DEL_TIMEOUT
