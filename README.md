@@ -186,3 +186,7 @@ ignition['storage'] = storage
 json.dump(ignition, sys.stdout)" <master.ign >"$INFRA_ID-master-$index-ignition.json"
 done
 ```
+
+```
+for index in $(seq 0 2); do MASTER_IGNITION_FILE=$INFRA_ID-master-$index-ignition.json  python master-ignition-custom.py ; done
+```
