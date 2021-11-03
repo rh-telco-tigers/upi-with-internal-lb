@@ -2,6 +2,10 @@
 Process to install using UPI with internal Load balancer
 
 
+# Export
+export OS_CLOUD="standalone"
+export INFRA_ID=$(jq -r .infraID metadata.json)
+
 # Download openshift-install
 ```
 curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.6.49/openshift-install-linux-4.6.49.tar.gz

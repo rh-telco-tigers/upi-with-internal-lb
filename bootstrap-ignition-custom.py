@@ -64,7 +64,7 @@ if coredns_path:
         }
     })
 
-keepalived_conf_path = "/home/stack/ocp/4.6/upi-with-internal-lb/bootstrap/static-pod-resources/keepalived/keepalived.conf.tmpl"
+keepalived_conf_path = "/home/stack/ocp/4.6/upi-with-internal-lb/bootstrap/static-pod-resources/keepalived.conf.tmpl"
 if keepalived_conf_path:
     with open(keepalived_conf_path, 'r') as f:
         keepalived_conf = f.read().encode()
