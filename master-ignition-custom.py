@@ -62,7 +62,7 @@ if keepalived_script2_path:
 
     files.append(
     {
-        'path': '/etc/kubernetes/static-pod-resources/keepalived/scripts/chk_ocp_script.sh.tmpl',
+        'path': '/etc/kubernetes/static-pod-resources/keepalived/scripts/chk_ocp_script_both.sh.tmpl',
         'mode': 644,
         'contents': {
             'source': 'data:text/plain;charset=utf-8;base64,' + keepalived_script2_b64
