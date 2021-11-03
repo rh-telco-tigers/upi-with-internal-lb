@@ -160,10 +160,10 @@ vim $INFRA_ID-bootstrap-ignition.json
   "ignition": {
     "config": {
       "merge": [{
-        "source": "http://192.168.7.213:9292/v2/images/1999ea1e-0f3d-4d93-be17-72c346c87783/file", 
+        "source": "http://192.168.7.213:9292/v2/images/54188c6d-f346-4882-9cc4-3cd0a6d60017/file", 
         "httpHeaders": [{
           "name": "X-Auth-Token", 
-          "value": "gAAAAABhgpwNCRt9pgq6AKCh6MUXsBAWfKMsC-N36OlVgRPII29bvIpoCwLZuuTn-sZZehPU9l-e9spuBxQxpLI7wsu3P3W_UgDrUC4iJ3xQb9WQgRPlJYB3nOiZYA8PWV0WmAUlPFiwN2neft2Lllz2hH7KGE7sbvMAcVOX9s3jDtxqrxvpxBg" 
+          "value": "gAAAAABhgtAKLm-TE65qtQGvlT_DO1yxV7kdN3pgea_RnQRARlc7RyISR_xF3F4EhE1sPjE5Bsm_8RBl8H_KYoyk3XlMMV4ozjRdlV000g-a5S3Ahxf3q8XZTe4DOcMZQxy6ouTpdoEIFKslxOzsbHLWVDbVNJZGmFNYD_aq9fGRX6QBXbMxJHE" 
         }]
       }]
     },
