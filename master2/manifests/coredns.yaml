@@ -2,11 +2,11 @@ kind: Pod
 apiVersion: v1
 metadata:
   name: coredns
-  namespace: openshift-kni-infra
+  namespace: openshift-openstack-infra
   creationTimestamp:
   deletionGracePeriodSeconds: 65
   labels:
-    app: kni-infra-mdns
+    app: openstack-infra-mdns
 spec:
   volumes:
   - name: resource-dir
@@ -18,20 +18,17 @@ spec:
   - name: conf-dir
     hostPath:
       path: "/etc/coredns"
-  - name: nm-resolv
-    hostPath:
-      path: "/var/run/NetworkManager"
   initContainers:
   - name: render-config-coredns
-    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3899b8fba1ab11d5cbff5581ca3bc7c06ba47eece58588cd53f93ead60e8ea4c
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:c1f0f7c54f0f2ecd38fdf2667651f95153a589bd7fe4605f0f96a97899576a08
     command:
     - runtimecfg
     - render
     - "/etc/kubernetes/kubeconfig"
     - "--api-vip"
-    - "192.168.20.110"
+    - "10.0.0.5"
     - "--ingress-vip"
-    - "192.168.20.111"
+    - "10.0.0.7"
     - "/config"
     - "--out-dir"
     - "/etc/coredns"
@@ -48,7 +45,7 @@ spec:
   - name: coredns
     securityContext:
       privileged: true
-    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:4d6d9e55b48edaeba59091abbcee46162b9153d44b9aac30c98ac94c6bd085cf
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:c4250d804c24d6e2767fde7c97fe94ebcad52135e0525d1b59ac40db28327a65
     args:
     - "--conf"
     - "/etc/coredns/Corefile"
@@ -59,16 +56,6 @@ spec:
     volumeMounts:
     - name: conf-dir
       mountPath: "/etc/coredns"
-    readinessProbe:
-      httpGet:
-        path: /health
-        port: 18080
-        scheme: HTTP
-      initialDelaySeconds: 10
-      periodSeconds: 10
-      successThreshold: 1
-      failureThreshold: 3
-      timeoutSeconds: 10
     livenessProbe:
       httpGet:
         path: /health
@@ -80,33 +67,6 @@ spec:
       failureThreshold: 5
     terminationMessagePolicy: FallbackToLogsOnError
     imagePullPolicy: IfNotPresent
-  - name: coredns-monitor
-    securityContext:
-      privileged: true
-    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3899b8fba1ab11d5cbff5581ca3bc7c06ba47eece58588cd53f93ead60e8ea4c
-    command:
-    - corednsmonitor
-    - "/etc/kubernetes/kubeconfig"
-    - "/config/Corefile.tmpl"
-    - "/etc/coredns/Corefile"
-    - "--api-vip"
-    - "192.168.20.110"
-    - "--ingress-vip"
-    - "192.168.20.111"
-    resources:
-      requests:
-        cpu: 100m
-        memory: 200Mi          
-    volumeMounts:
-    - name: kubeconfig
-      mountPath: "/etc/kubernetes/kubeconfig"
-    - name: resource-dir
-      mountPath: "/config"
-    - name: conf-dir
-      mountPath: "/etc/coredns"
-    - name: nm-resolv
-      mountPath: "/var/run/NetworkManager"
-    imagePullPolicy: IfNotPresent        
   hostNetwork: true
   tolerations:
   - operator: Exists

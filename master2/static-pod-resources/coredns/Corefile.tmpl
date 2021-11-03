@@ -1,0 +1,11 @@
+. {
+    errors
+    health :18080
+    mdns demotel.zerotodevops.com 0 {{.Cluster.Name}} {{.NonVirtualIP}}
+    forward . {{- range $upstream := .DNSUpstreams}} {{$upstream}}{{- end}} {
+        policy sequential
+    }
+    cache 30
+    reload
+    file /etc/coredns/node-dns-db demotel.zerotodevops.com
+}

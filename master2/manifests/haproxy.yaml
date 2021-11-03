@@ -2,11 +2,11 @@ kind: Pod
 apiVersion: v1
 metadata:
   name: haproxy
-  namespace: openshift-kni-infra
+  namespace: openshift-openstack-infra
   creationTimestamp:
   deletionGracePeriodSeconds: 65
   labels:
-    app: kni-infra-api-lb
+    app: openstack-infra-api-lb
 spec:
   volumes:
   - name: resource-dir
@@ -25,7 +25,7 @@ spec:
       path: "/"
   containers:
   - name: haproxy
-    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3496c77d7281fd4854732c9b8a0eb09283a162ce0a4b8a3c96ba51184049f0be
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:555efd05a7c11ebd96922a0541556781e093fb7be09aed2b3d6f7973982e1a88
     env:
       - name: OLD_HAPROXY_PS_FORCE_DEL_TIMEOUT
         value: "120"
@@ -37,11 +37,9 @@ spec:
       verify_old_haproxy_ps_being_deleted()
       {
         local prev_pids
-
         prev_pids="$1"
         sleep $OLD_HAPROXY_PS_FORCE_DEL_TIMEOUT
         cur_pids=$(pidof haproxy)
-
         for val in $prev_pids; do
             if [[ $cur_pids =~ (^|[[:space:]])"$val"($|[[:space:]]) ]] ; then
                kill $val
@@ -103,17 +101,17 @@ spec:
   - name: haproxy-monitor
     securityContext:
       privileged: true
-    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3899b8fba1ab11d5cbff5581ca3bc7c06ba47eece58588cd53f93ead60e8ea4c
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:c1f0f7c54f0f2ecd38fdf2667651f95153a589bd7fe4605f0f96a97899576a08
     command:
       - "/bin/bash"
       - "-c"
       - |            
         cp /host/etc/resolv.conf /etc/resolv.conf
-        monitor /var/lib/kubelet/kubeconfig  /config/haproxy.cfg.tmpl  /etc/haproxy/haproxy.cfg  --api-vip 192.168.20.110
+        monitor /var/lib/kubelet/kubeconfig  /config/haproxy.cfg.tmpl  /etc/haproxy/haproxy.cfg  --api-vip 10.0.0.5
     resources:
       requests:
         cpu: 100m
-        memory: 200Mi          
+        memory: 200Mi
     volumeMounts:
     - name: conf-dir
       mountPath: "/etc/haproxy"
