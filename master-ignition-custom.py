@@ -3,7 +3,8 @@ import json
 import os
 import sys
 
-with open('demotel-4hbnz-master-2-ignition.json', 'r') as f:
+master_ignition_file = os.environ.get('MASTER_IGNITION_FILE', '')
+with open(master_ignition_file, 'r') as f:
     ignition = json.load(f)
 
 files = ignition['storage'].get('files', [])
@@ -161,5 +162,5 @@ if coredns_conf_path:
 
 ignition['storage']['files'] = files;
 
-with open('demotel-4hbnz-master-2-ignition.json', 'w') as f:
+with open(master_ignition_file, 'w') as f:
     json.dump(ignition, f)
