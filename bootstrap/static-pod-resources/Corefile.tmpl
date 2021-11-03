@@ -1,0 +1,14 @@
+. {
+    errors
+    health :18080
+    mdns demotel.zerotodevops.com {{.Cluster.MasterAmount}} {{.Cluster.Name}} {{.NonVirtualIP}}
+    forward . {{- range $upstream := .DNSUpstreams}} {{$upstream}}{{- end}} {
+        policy sequential
+    }
+    cache 30
+    reload
+    hosts /etc/coredns/api-int.hosts demotel.zerotodevops.com {
+        10.0.0.5 api-int.demotel.zerotodevops.com api.demotel.zerotodevops.com
+        fallthrough
+    }
+}
