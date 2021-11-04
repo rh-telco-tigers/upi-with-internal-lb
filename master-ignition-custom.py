@@ -9,7 +9,7 @@ with open(master_ignition_file, 'r') as f:
 
 files = ignition['storage'].get('files', [])
 
-keepalived_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master2/manifests/keepalived.yaml"
+keepalived_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master/manifests/keepalived.yaml"
 if keepalived_path:
     with open(keepalived_path, 'r') as f:
         keepalived_kubelet = f.read().encode()
@@ -24,7 +24,7 @@ if keepalived_path:
         }
     })
 
-keepalived_conf_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master2/static-pod-resources/keepalived/keepalived.conf.tmpl"
+keepalived_conf_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master/static-pod-resources/keepalived/keepalived.conf.tmpl"
 if keepalived_conf_path:
     with open(keepalived_conf_path, 'r') as f:
         keepalived_conf = f.read().encode()
@@ -39,7 +39,7 @@ if keepalived_conf_path:
         }
     })
 
-keepalived_script1_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master2/static-pod-resources/keepalived/scripts/chk_ocp_script.sh.tmpl"
+keepalived_script1_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master/static-pod-resources/keepalived/scripts/chk_ocp_script.sh.tmpl"
 if keepalived_script1_path:
     with open(keepalived_script1_path, 'r') as f:
         keepalived_script1 = f.read().encode()
@@ -54,7 +54,7 @@ if keepalived_script1_path:
         }
     })
 
-keepalived_script2_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master2/static-pod-resources/keepalived/scripts/chk_ocp_script_both.sh.tmpl"
+keepalived_script2_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master/static-pod-resources/keepalived/scripts/chk_ocp_script_both.sh.tmpl"
 if keepalived_script2_path:
     with open(keepalived_script2_path, 'r') as f:
         keepalived_script2 = f.read().encode()
@@ -69,7 +69,7 @@ if keepalived_script2_path:
         }
     })
 
-haproxy_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master2/manifests/haproxy.yaml"
+haproxy_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master/manifests/haproxy.yaml"
 if haproxy_path:
     with open(haproxy_path, 'r') as f:
         haproxy_kubelet = f.read().encode()
@@ -84,7 +84,7 @@ if haproxy_path:
         }
     })
 
-haproxy_conf_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master2/static-pod-resources/haproxy/haproxy.cfg.tmpl"
+haproxy_conf_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master/static-pod-resources/haproxy/haproxy.cfg.tmpl"
 if haproxy_conf_path:
     with open(haproxy_conf_path, 'r') as f:
         haproxy_conf = f.read().encode()
@@ -99,7 +99,7 @@ if haproxy_conf_path:
         }
     })
 
-mdns_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master2/manifests/mdns-publisher.yaml"
+mdns_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master/manifests/mdns-publisher.yaml"
 if mdns_path:
     with open(mdns_path, 'r') as f:
         mdns_kubelet = f.read().encode()
@@ -114,7 +114,7 @@ if mdns_path:
         }
     })
 
-mdns_conf_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master2/static-pod-resources/mdns/config.hcl.tmpl"
+mdns_conf_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master/static-pod-resources/mdns/config.hcl.tmpl"
 if mdns_conf_path:
     with open(mdns_conf_path, 'r') as f:
         mdns_conf = f.read().encode()
@@ -130,7 +130,7 @@ if mdns_conf_path:
     })
 
 
-coredns_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master2/manifests/coredns.yaml"
+coredns_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master/manifests/coredns.yaml"
 if coredns_path:
     with open(coredns_path, 'r') as f:
         coredns_kubelet = f.read().encode()
@@ -145,7 +145,7 @@ if coredns_path:
         }
     })
 
-coredns_conf_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master2/static-pod-resources/coredns/Corefile.tmpl"
+coredns_conf_path = "/home/stack/ocp/4.6/upi-with-internal-lb/master/static-pod-resources/coredns/Corefile.tmpl"
 if coredns_conf_path:
     with open(coredns_conf_path, 'r') as f:
         coredns_conf = f.read().encode()

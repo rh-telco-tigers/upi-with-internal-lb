@@ -160,10 +160,10 @@ vim $INFRA_ID-bootstrap-ignition.json
   "ignition": {
     "config": {
       "merge": [{
-        "source": "http://192.168.7.213:9292/v2/images/3d038e38-f5ff-4520-b60a-7145e402bbb1/file", 
+        "source": "http://192.168.7.213:9292/v2/images/5914cc07-c18e-44b3-b7e9-2b89e3f8cfc0/file", 
         "httpHeaders": [{
           "name": "X-Auth-Token", 
-          "value": "gAAAAABhgt-7Rakh7mq8yzfa2JnuMzF8aBRxZdl8SBpCRKByj-1wmBU1XsZuWtFnCJ9tFmyhLHp93khMBgztr_3T_vB6SgCuigi52tDoSOgnX1r2nsxsYEdKfyDG9aR-QD8KDopTVbIUl64UA__kiFWgZ0pWukwo0zoWemsfswCWs75zNpfd6Cc" 
+          "value": "gAAAAABhg_AhfdyOsPHL6Ja3vnvBs3ZVTEmEnjUjDetaO4GxSUcEWJqJ6XfFqGhHtWvsf3TPZz1_qR793WoUhisMkJjUtoQJdFUOLhOZN7SzQNV-oIWmpcmWkPwVhpyWpP95dLxYTbDjY3W-2qkt1vAQFBfOmB0oZZA8VKH5OtwgIVfjNOjBdKc" 
         }]
       }]
     },
@@ -173,6 +173,21 @@ vim $INFRA_ID-bootstrap-ignition.json
 ```
 
 ## Control plane ignition config
+```
+for index in $(seq 0 2); do
+    MASTER_HOSTNAME="$INFRA_ID-master-$index\n"
+    python -c "import base64, json, sys;
+ignition = json.load(sys.stdin);
+storage = ignition.get('storage', {});
+files = storage.get('files', []);
+files.append({'path': '/etc/hostname', 'mode': 420, 'contents': {'source': 'data:text/plain;charset=utf-8;base64,' + base64.standard_b64encode(b'$MASTER_HOSTNAME').decode().strip(), 'verification': {}}, 'filesystem': 'root'});
+storage['files'] = files;
+ignition['storage'] = storage
+json.dump(ignition, sys.stdout)" <master.ign >"$INFRA_ID-master-$index-ignition.json"
+done
+```
+
+
 ```
 for index in $(seq 0 2); do
     MASTER_HOSTNAME="$INFRA_ID-master-$index\n"
