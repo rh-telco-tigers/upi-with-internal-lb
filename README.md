@@ -160,10 +160,10 @@ vim $INFRA_ID-bootstrap-ignition.json
   "ignition": {
     "config": {
       "merge": [{
-        "source": "http://192.168.7.213:9292/v2/images/5914cc07-c18e-44b3-b7e9-2b89e3f8cfc0/file", 
+        "source": "http://192.168.7.213:9292/v2/images/ca86b649-503a-403d-9847-c877cc6ffce9/file", 
         "httpHeaders": [{
           "name": "X-Auth-Token", 
-          "value": "gAAAAABhg_AhfdyOsPHL6Ja3vnvBs3ZVTEmEnjUjDetaO4GxSUcEWJqJ6XfFqGhHtWvsf3TPZz1_qR793WoUhisMkJjUtoQJdFUOLhOZN7SzQNV-oIWmpcmWkPwVhpyWpP95dLxYTbDjY3W-2qkt1vAQFBfOmB0oZZA8VKH5OtwgIVfjNOjBdKc" 
+          "value": "gAAAAABhhYYAoB4M8zrmsDSr6pFgA-fUq5qnuW8boWm6dVOX7SXBKCMeQZPM2q-yiV1dN6zBBnDQdfa1hn1e4VPqF5LEd61e77MMN8h7fhW2znxTKDmRcv5OchfXvzQ2MVNhpu-Q_QxhmGSI_rbFeU6pcDo4T-AmQrQfFy8cDHVgXVJOxvL0PcU" 
         }]
       }]
     },
@@ -211,6 +211,13 @@ for index in $(seq 0 2); do MASTER_IGNITION_FILE=$INFRA_ID-master-$index-ignitio
 We can also use the filetranspiler tool for creating custom ignition files. This tool creates an Ignition file from a fake root. To install this tool pleas follow [this URL](https://github.com/ashcrow/filetranspiler).
 
 You can also get ROM version from [here](https://download.copr.fedorainfracloud.org/results/eminguez/eminguez-RPMs/fedora-33-x86_64/01784152-filetranspiler/filetranspiler-1.1.0-1.fc33.x86_64.rpm)
+
+
+```
+curl -LO https://download.copr.fedorainfracloud.org/results/eminguez/eminguez-RPMs/fedora-33-x86_64/01784152-filetranspiler/filetranspiler-1.1.0-1.fc33.x86_64.rpm
+sudo rpm -ivh filetranspiler-1.1.0-1.fc33.x86_64.rpm 
+```
+
 
 Once you have installed this tool create a fakeroot directory. See example below
 ```

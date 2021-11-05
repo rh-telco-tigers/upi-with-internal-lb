@@ -2,7 +2,7 @@ import base64
 import json
 import os
 
-with open('bootstrap.ign', 'r') as f:
+with open('./install-dir/bootstrap.ign', 'r') as f:
     ignition = json.load(f)
 
 files = ignition['storage'].get('files', [])
@@ -35,5 +35,5 @@ if ca_cert_path:
 
 ignition['storage']['files'] = files;
 
-with open('bootstrap.ign', 'w') as f:
+with open('./install-dir/bootstrap.ign', 'w') as f:
     json.dump(ignition, f)
