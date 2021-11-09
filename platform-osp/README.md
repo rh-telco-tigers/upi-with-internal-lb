@@ -90,3 +90,15 @@ all:
 4. Modify master ignition configs using `04-modify-master-ignition.sh` scripts.
 5. Upload bootstrap ignition config to Openstack Glance using `05-upload-bootstrap-ignition.sh`. Technically, you can host this ignition configuration on any webserver.
 6. Finally create the cluster using `06-create-cluster.sh`
+
+
+## Create following entry set in your `/etc/hosts` to access cluster locally
+```
+192.168.5.126 api.demoosp.zerotodevops.com
+192.168.5.179 oauth-openshift.apps.demoosp.zerotodevops.com
+192.168.5.179 console-openshift-console.apps.demoosp.zerotodevops.com
+192.168.5.179 grafana-openshift-monitoring.apps.demoosp.zerotodevops.com
+192.168.5.179 thanos-querier-openshift-monitoring.apps.demoosp.zerotodevops.com
+192.168.5.179 prometheus-k8s-openshift-monitoring.apps.demoosp.zerotodevops.com
+192.168.5.179 alertmanager-main-openshift-monitoring.apps.demoosp.zerotodevops.com
+```
