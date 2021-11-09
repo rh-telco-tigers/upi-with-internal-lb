@@ -72,21 +72,21 @@ all:
       # OpenShift API floating IP address. If this value is non-empty, the
       # corresponding floating IP will be attached to the Control Plane to
       # serve the OpenShift API.
-      os_api_fip: '192.168.5.155'
+      os_api_fip: '192.168.5.126'
 
       # OpenShift Ingress floating IP address. If this value is non-empty, the
       # corresponding floating IP will be attached to the worker nodes to serve
       # the applications.
-      os_ingress_fip: '192.168.5.93'
+      os_ingress_fip: '192.168.5.179'
 
       # If this value is non-empty, the corresponding floating IP will be
       # attached to the bootstrap machine. This is needed for collecting logs
       # in case of install failure.
-      os_bootstrap_fip: '192.168.5.184'
+      os_bootstrap_fip: '192.168.5.200'
 ```
 
 2. Add your image pull secrets to `install-dir/install-config.yaml` and use `02-initial-ignition-config.sh` to construct initial ignition configs.
-3. Modify bootstrap ignition configs using `03-modify-bootstrap-ignition.sh`, we are using python script and `filetranspile` tool to generate this ignition config. Use the script  `scripts/0x-install-filetranspiler.sh` to obtain `filetranspile` utility.
+3. Modify bootstrap ignition configs using `03-modify-bootstrap-ignition.sh`, we are using python script to generate this ignition config.
 4. Modify master ignition configs using `04-modify-master-ignition.sh` scripts.
 5. Upload bootstrap ignition config to Openstack Glance using `05-upload-bootstrap-ignition.sh`. Technically, you can host this ignition configuration on any webserver.
 6. Finally create the cluster using `06-create-cluster.sh`
