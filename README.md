@@ -3,7 +3,7 @@ In this POC we are going to install Openshift with UPI (User Provided Infrastruc
  
 There are 3 separate way we are creating cluster to show the different use cases in this POC,
 
-1. Create OpenShift on Openstack using Openstack as a targe platform: This approach automatically deploy these components (HAProxy, Keepalived, Coredns, and Mdns publisher) and manage those as a part of cluster's life cycle management. This is the only officially supported method when you create OCP on OSP. For this all you need to do is select openstack as your target platform when you create install config for the cluster. For example
+1. Create OpenShift on Openstack using Openstack as a targe platform: This approach automatically deploy these components (HAProxy, Keepalived, Coredns, and Mdns publisher) and manage those as a part of cluster's life cycle management. This is the only officially supported method when you create OCP on OSP which support internal loadbalancer out of box. For this all you need to do is select openstack as your target platform when you create install config for the cluster. For example
 ```
 platform:
   openstack:

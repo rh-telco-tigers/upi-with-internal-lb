@@ -88,6 +88,39 @@ all:
 2. Add your image pull secrets to `install-dir/install-config.yaml` and use `02-initial-ignition-config.sh` to construct initial ignition configs.
 3. Modify bootstrap ignition configs using `03-modify-bootstrap-ignition.sh`, we are using python script to generate this ignition config.
 4. Modify master ignition configs using `04-modify-master-ignition.sh` scripts.
+Your directory structure should looks like following at this point.
+```
+tree install-dir/
+install-dir/
+├── ansible-errors.json
+├── auth
+│   ├── kubeadmin-password
+│   └── kubeconfig
+├── bootstrap.ign
+├── bootstrap.yaml
+├── common.yaml
+├── compute-nodes.yaml
+├── control-plane.yaml
+├── down-bootstrap.yaml
+├── down-compute-nodes.yaml
+├── down-containers.yaml
+├── down-control-plane.yaml
+├── down-load-balancers.yaml
+├── down-network.yaml
+├── down-security-groups.yaml
+├── inventory.yaml
+├── master.ign
+├── metadata.json
+├── network.yaml
+├── ocponosp-jw68k-bootstrap-ignition.json
+├── ocponosp-jw68k-master-0-ignition.json
+├── ocponosp-jw68k-master-1-ignition.json
+├── ocponosp-jw68k-master-2-ignition.json
+├── security-groups.yaml
+└── worker.ign
+
+1 directory, 25 files
+```
 5. Upload bootstrap ignition config to Openstack Glance using `05-upload-bootstrap-ignition.sh`. Technically, you can host this ignition configuration on any webserver.
 6. Finally create the cluster using `06-create-cluster.sh`
 
