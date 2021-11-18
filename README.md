@@ -1,18 +1,30 @@
-# upi-with-internal-lb
-Installing Openshift with UPI and an internal load balancer. For installation instructions, go to the readme file in the corresponding platform folder.
+# Install: User Provided Infrastructure (UPI) with Internal Load Balancer
+In this POC we are going to install Openshift with UPI (User Provided Infrastructure). The overall goal is to deploy HAProxy, Keepalived and Coredns inside the same cluster to avoid creating outside DNS entries and load balancers for control plane components. This will allow us to lessen our dependence on external load balancers while also minimizing the resource usage.
+ 
+There are 3 separate way we are creating cluster to show the different use cases in this POC,
 
-# Some Handy-commands for reference
+1. Create OpenShift on Openstack using Openstack as a targe platform: This approach automatically deploy these components (HAProxy, Keepalived, Coredns, and Mdns publisher) and manage those as a part of cluster's life cycle management. This is the only officially supported method when you create OCP on OSP. For this all you need to do is select openstack as your target platform when you create install config for the cluster. For example
 ```
-export OS_CLOUD="standalone"
-export INFRA_ID=$(jq -r .infraID metadata.json)
-openstack quota set --secgroups 300 --secgroup-rules 1000 admin
-openstack console log show "$INFRA_ID-bootstrap"
-openshift-install wait-for bootstrap-complete
-openstack token issue -c id -f value
-openstack catalog show image
-openstack image show ocp-4.9-bootstrap.ign
+platform:
+  openstack:
+    apiVIP: 10.0.0.5
+    cloud: standalone
+    computeFlavor: m1.large
+    externalDNS: null
+    externalNetwork: public
+    ingressVIP: 10.0.0.7
+    lbFloatingIP: 192.168.5.126
 ```
 
+2. In the second method also we are using openstack but we set platform to none and manually install all of the components, including HAProxy, Keepalived, Coredns, and Mdns publisher. We create a custom ignition config file for the bootstrap and master node using this method. We're going to use the `filetranspiler` utility tool to produce the custom ignition config. 
+```
+platform:
+  none: {}
+```
+
+3. The third option is very identical to the second, with the exception that we use VMware instead of OpenStack for infrastructure.
+
+For installation instructions, go to the readme file in the corresponding platform folder.
 
 ## Creating Ignition file with filetranspiler tool
 We can also use the filetranspiler tool for creating custom ignition files. This tool creates an Ignition file from a fake root. To install this tool please follow [this URL](https://github.com/ashcrow/filetranspiler).
