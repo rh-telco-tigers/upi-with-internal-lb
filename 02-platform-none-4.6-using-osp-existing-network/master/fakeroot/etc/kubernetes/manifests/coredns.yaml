@@ -1,0 +1,74 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: coredns
+  namespace: openshift-openstack-infra
+  creationTimestamp:
+  deletionGracePeriodSeconds: 65
+  labels:
+    app: openstack-infra-mdns
+spec:
+  volumes:
+  - name: resource-dir
+    hostPath:
+      path: "/etc/kubernetes/static-pod-resources/coredns"
+  - name: kubeconfig
+    hostPath:
+      path: "/etc/kubernetes/kubeconfig"
+  - name: conf-dir
+    hostPath:
+      path: "/etc/coredns"
+  initContainers:
+  - name: render-config-coredns
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:c1f0f7c54f0f2ecd38fdf2667651f95153a589bd7fe4605f0f96a97899576a08
+    command:
+    - runtimecfg
+    - render
+    - "/etc/kubernetes/kubeconfig"
+    - "--api-vip"
+    - "10.0.0.5"
+    - "--ingress-vip"
+    - "10.0.0.7"
+    - "/config"
+    - "--out-dir"
+    - "/etc/coredns"
+    resources: {}
+    volumeMounts:
+    - name: kubeconfig
+      mountPath: "/etc/kubernetes/kubeconfig"
+    - name: resource-dir
+      mountPath: "/config"
+    - name: conf-dir
+      mountPath: "/etc/coredns"
+    imagePullPolicy: IfNotPresent
+  containers:
+  - name: coredns
+    securityContext:
+      privileged: true
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:c4250d804c24d6e2767fde7c97fe94ebcad52135e0525d1b59ac40db28327a65
+    args:
+    - "--conf"
+    - "/etc/coredns/Corefile"
+    resources:
+      requests:
+        cpu: 100m
+        memory: 200Mi
+    volumeMounts:
+    - name: conf-dir
+      mountPath: "/etc/coredns"
+    livenessProbe:
+      httpGet:
+        path: /health
+        port: 18080
+        scheme: HTTP
+      initialDelaySeconds: 60
+      timeoutSeconds: 5
+      successThreshold: 1
+      failureThreshold: 5
+    terminationMessagePolicy: FallbackToLogsOnError
+    imagePullPolicy: IfNotPresent
+  hostNetwork: true
+  tolerations:
+  - operator: Exists
+  priorityClassName: system-node-critical
+status: {}
