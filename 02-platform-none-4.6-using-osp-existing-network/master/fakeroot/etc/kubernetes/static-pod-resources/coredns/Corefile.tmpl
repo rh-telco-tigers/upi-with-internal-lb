@@ -1,11 +1,11 @@
 . {
     errors
     health :18080
-    mdns ocp30.nfvdev.tlabs.ca 0 {{.Cluster.Name}} {{.NonVirtualIP}}
+    mdns ocp300.nfvdev.tlabs.ca 0 {{.Cluster.Name}} {{.NonVirtualIP}}
     forward . {{- range $upstream := .DNSUpstreams}} {{$upstream}}{{- end}} {
         policy sequential
     }
     cache 30
     reload
-    file /etc/coredns/node-dns-db ocp30.nfvdev.tlabs.ca
+    file /etc/coredns/node-dns-db ocp300.nfvdev.tlabs.ca
 }
