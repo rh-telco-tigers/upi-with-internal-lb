@@ -37,9 +37,9 @@ spec:
     - render
     - "/etc/kubernetes/kubeconfig"
     - "--api-vip"
-    - "10.0.0.5"
+    - "172.21.104.13"
     - "--ingress-vip"
-    - "10.0.0.7"
+    - "172.21.104.14"
     - "/config"
     - "--out-dir"
     - "/etc/keepalived"
@@ -129,9 +129,9 @@ spec:
     - "/config/keepalived.conf.tmpl"
     - "/etc/keepalived/keepalived.conf"
     - "--api-vip"
-    - "10.0.0.5"
+    - "172.21.104.13"
     - "--ingress-vip"
-    - "10.0.0.7"
+    - "172.21.104.14"
     resources:
       requests:
         cpu: 100m

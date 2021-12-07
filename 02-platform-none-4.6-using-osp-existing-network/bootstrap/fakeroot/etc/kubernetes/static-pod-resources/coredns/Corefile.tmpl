@@ -1,14 +1,14 @@
 . {
     errors
     health :18080
-    mdns demotelbm.zerotodevops.com {{.Cluster.MasterAmount}} {{.Cluster.Name}} {{.NonVirtualIP}}
+    mdns ocp30.nfvdev.tlabs.ca {{.Cluster.MasterAmount}} {{.Cluster.Name}} {{.NonVirtualIP}}
     forward . {{- range $upstream := .DNSUpstreams}} {{$upstream}}{{- end}} {
         policy sequential
     }
     cache 30
     reload
-    hosts /etc/coredns/api-int.hosts demotel.zerotodevops.com {
-        10.0.0.5 api-int.demotelbm.zerotodevops.com api.demotelbm.zerotodevops.com
+    hosts /etc/coredns/api-int.hosts ocp30.nfvdev.tlabs.ca {
+        172.21.104.13 api-int.ocp30.nfvdev.tlabs.ca api.ocp30.nfvdev.tlabs.ca
         fallthrough
     }
 }
