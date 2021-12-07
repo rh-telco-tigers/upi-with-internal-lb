@@ -21,9 +21,9 @@
       - ip_address: "{{ os_subnet_range | next_nth_usable(5) }}"
       - ip_address: "{{ os_subnet_range | next_nth_usable(6) }}"
 
-  - name: 'Set bootstrap port tag'
-    command:
-      cmd: "openstack port set --tag {{ cluster_id_tag }} {{ os_port_bootstrap }}"
+  # - name: 'Set bootstrap port tag'
+  #   command:
+  #     cmd: "openstack port set --tag {{ cluster_id_tag }} {{ os_port_bootstrap }}"
 
   - name: 'Set bootstrap auto_ip to false'
     ansible.builtin.set_fact:

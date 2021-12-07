@@ -24,10 +24,10 @@
     with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
     register: ports
 
-  - name: 'Set Control Plane ports tag'
-    command:
-      cmd: "openstack port set --tag {{ cluster_id_tag }} {{ item.1 }}-{{ item.0 }}"
-    with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
+  # - name: 'Set Control Plane ports tag'
+  #   command:
+  #     cmd: "openstack port set --tag {{ cluster_id_tag }} {{ item.1 }}-{{ item.0 }}"
+  #   with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
 
   - name: 'List the Control Plane Trunks'
     command:
