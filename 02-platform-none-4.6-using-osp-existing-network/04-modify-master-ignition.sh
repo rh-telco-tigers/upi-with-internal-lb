@@ -12,5 +12,6 @@ storage['files'] = files;
 ignition['storage'] = storage
 json.dump(ignition, sys.stdout)" <install-dir/master.ign > "install-dir/$INFRA_ID-master-$index-ignition.json"
 
-filetranspile -i install-dir/$INFRA_ID-master-$index-ignition.json -f master/fakeroot -o install-dir/$INFRA_ID-master-$index-ignition.json
+#filetranspile -i install-dir/$INFRA_ID-master-$index-ignition.json -f master/fakeroot -o install-dir/$INFRA_ID-master-$index-ignition.json
+docker run --rm -ti --volume `pwd`:/srv:z filetranspile:latest -i install-dir/$INFRA_ID-master-$index-ignition.json -f master/fakeroot  -o install-dir/$INFRA_ID-master-$index-ignition.json
 done
