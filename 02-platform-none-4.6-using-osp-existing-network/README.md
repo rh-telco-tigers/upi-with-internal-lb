@@ -31,8 +31,7 @@ openstack floating ip create --description "demotel Bootstrap" ${NETWORK_ID}
 
 ## Execute scripts in sequence
 
-1. Get ansible playbooks using script `01-get-ansible-playbook.sh`
-Once you get the playbook, make sure to change `inventory.yaml` as per your environment. For example
+1. Change `inventory.yaml` as per your environment. For example
 ```
 all:
   hosts:
