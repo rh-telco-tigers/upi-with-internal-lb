@@ -3,8 +3,6 @@ This post demonstrates how to install an OpenShift cluster using the UPI techniq
 
 > Note 1: Please keep in mind that this is not an officially supported solution and is not recommended for production grade cluster.
 
-> Note 2: We built the infrastructure with an Openstack Tripleo cluster, but it should be possible to reproduce it with any UPI cluster.
-
 ## Pre-requisites
 - Access to Openstack Environment
 - Access to cloud.redhat.com
