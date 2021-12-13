@@ -1,11 +1,43 @@
 . {
     errors
+    bufsize 512
     health :18080
-    mdns ocp300.nfvdev.tlabs.ca 0 {{.Cluster.Name}} {{.NonVirtualIP}}
     forward . {{- range $upstream := .DNSUpstreams}} {{$upstream}}{{- end}} {
         policy sequential
     }
     cache 30
     reload
-    file /etc/coredns/node-dns-db ocp300.nfvdev.tlabs.ca
+    template IN {{ .Cluster.IngressVIPRecordType }} ocp300.nfvdev.tlabs.ca {
+        match .*.apps.ocp300.nfvdev.tlabs.ca
+        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.104.14"
+        fallthrough
+    }
+    template IN {{ .Cluster.IngressVIPEmptyType }} ocp300.nfvdev.tlabs.ca {
+        match .*.apps.ocp300.nfvdev.tlabs.ca
+        fallthrough
+    }
+    template IN {{ .Cluster.APIVIPRecordType }} ocp300.nfvdev.tlabs.ca {
+        match api.ocp300.nfvdev.tlabs.ca
+        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.104.13"
+        fallthrough
+    }
+    template IN {{ .Cluster.APIVIPEmptyType }} ocp300.nfvdev.tlabs.ca {
+        match api.ocp300.nfvdev.tlabs.ca
+        fallthrough
+    }
+    template IN {{ .Cluster.APIVIPRecordType }} ocp300.nfvdev.tlabs.ca {
+        match api-int.ocp300.nfvdev.tlabs.ca
+        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.104.13"
+        fallthrough
+    }
+    template IN {{ .Cluster.APIVIPEmptyType }} ocp300.nfvdev.tlabs.ca {
+        match api-int.ocp300.nfvdev.tlabs.ca
+        fallthrough
+    }
+    hosts {
+        {{- range .Cluster.NodeAddresses }}
+        {{ .Address }} {{ .Name }} {{ .Name }}.{{ $.Cluster.Name }}.{{ $.Cluster.Domain }}
+        {{- end }}
+        fallthrough
+    }
 }
