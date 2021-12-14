@@ -1,0 +1,12 @@
+# Created by cloud-init on instance boot automatically, do not edit.
+#
+BOOTPROTO=none
+DEVICE=ens6
+HWADDR=02:a7:b8:9d:f5:6f
+IPADDR=172.21.112.6
+NETMASK=255.255.255.224
+ONBOOT=yes
+TYPE=Ethernet
+USERCTL=no
+ROUTING_RULE_1="priority 110 to 172.21.112.0/27 table 10"
+ROUTING_RULE_2="priority 110 from 172.21.112.0/27 table 10"

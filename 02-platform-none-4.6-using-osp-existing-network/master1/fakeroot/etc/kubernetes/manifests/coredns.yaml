@@ -1,4 +1,3 @@
----
 kind: Pod
 apiVersion: v1
 metadata:
@@ -8,8 +7,6 @@ metadata:
   deletionGracePeriodSeconds: 65
   labels:
     app: openstack-infra-mdns
-  annotations:
-    target.workload.openshift.io/management: '{"effect": "PreferredDuringScheduling"}'
 spec:
   volumes:
   - name: resource-dir
@@ -17,38 +14,35 @@ spec:
       path: "/etc/kubernetes/static-pod-resources/coredns"
   - name: kubeconfig
     hostPath:
-      path: "/etc/kubernetes/kubeconfig"
+      path: "/var/lib/kubelet"
   - name: conf-dir
-    empty-dir: {}
-  - name: manifests
     hostPath:
-      path: "/opt/openshift/manifests"
+      path: "/etc/coredns"
+  - name: nm-resolv
+    hostPath:
+      path: "/var/run/NetworkManager"
   initContainers:
-  - name: render-config
+  - name: render-config-coredns
     image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:2ce9667775acdefcff0a90199c2b87b001b98d7ea5b5e7ed18453ba47b318235
     command:
     - runtimecfg
     - render
-    - "/etc/kubernetes/kubeconfig"
+    - "/var/lib/kubelet/kubeconfig"
     - "--api-vip"
-    - "172.21.104.13"
+    - "10.0.0.5"
     - "--ingress-vip"
-    - "172.21.104.14"
+    - "10.0.0.7"
     - "/config"
     - "--out-dir"
     - "/etc/coredns"
-    - "--cluster-config"
-    - "/opt/openshift/manifests/cluster-config.yaml"
     resources: {}
     volumeMounts:
     - name: kubeconfig
-      mountPath: "/etc/kubernetes/kubeconfig"
+      mountPath: "/var/lib/kubelet"
     - name: resource-dir
       mountPath: "/config"
     - name: conf-dir
       mountPath: "/etc/coredns"
-    - name: manifests
-      mountPath: "/opt/openshift/manifests"
     imagePullPolicy: IfNotPresent
   containers:
   - name: coredns
@@ -75,6 +69,34 @@ spec:
       successThreshold: 1
       failureThreshold: 5
     terminationMessagePolicy: FallbackToLogsOnError
+    imagePullPolicy: IfNotPresent
+  - name: coredns-monitor
+    securityContext:
+      privileged: true
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:2ce9667775acdefcff0a90199c2b87b001b98d7ea5b5e7ed18453ba47b318235
+    command:
+    - corednsmonitor
+    - "/var/lib/kubelet/kubeconfig"
+    - "/config/Corefile.tmpl"
+    - "/etc/coredns/Corefile"
+    - "--api-vip"
+    - "172.21.104.13"
+    - "--ingress-vip"
+    - "172.21.104.14"
+    resources:
+      requests:
+        cpu: 100m
+        memory: 200Mi
+    volumeMounts:
+    - name: kubeconfig
+      mountPath: "/var/lib/kubelet"
+    - name: resource-dir
+      mountPath: "/config"
+    - name: conf-dir
+      mountPath: "/etc/coredns"
+    - name: nm-resolv
+      mountPath: "/var/run/NetworkManager"
+    imagePullPolicy: IfNotPresent
   hostNetwork: true
   tolerations:
   - operator: Exists

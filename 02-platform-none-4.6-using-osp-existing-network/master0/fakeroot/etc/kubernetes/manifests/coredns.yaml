@@ -14,28 +14,31 @@ spec:
       path: "/etc/kubernetes/static-pod-resources/coredns"
   - name: kubeconfig
     hostPath:
-      path: "/etc/kubernetes/kubeconfig"
+      path: "/var/lib/kubelet"
   - name: conf-dir
     hostPath:
       path: "/etc/coredns"
+  - name: nm-resolv
+    hostPath:
+      path: "/var/run/NetworkManager"
   initContainers:
   - name: render-config-coredns
-    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:c1f0f7c54f0f2ecd38fdf2667651f95153a589bd7fe4605f0f96a97899576a08
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:2ce9667775acdefcff0a90199c2b87b001b98d7ea5b5e7ed18453ba47b318235
     command:
     - runtimecfg
     - render
-    - "/etc/kubernetes/kubeconfig"
+    - "/var/lib/kubelet/kubeconfig"
     - "--api-vip"
-    - "172.21.104.13"
+    - "10.0.0.5"
     - "--ingress-vip"
-    - "172.21.104.14"
+    - "10.0.0.7"
     - "/config"
     - "--out-dir"
     - "/etc/coredns"
     resources: {}
     volumeMounts:
     - name: kubeconfig
-      mountPath: "/etc/kubernetes/kubeconfig"
+      mountPath: "/var/lib/kubelet"
     - name: resource-dir
       mountPath: "/config"
     - name: conf-dir
@@ -45,7 +48,7 @@ spec:
   - name: coredns
     securityContext:
       privileged: true
-    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:c4250d804c24d6e2767fde7c97fe94ebcad52135e0525d1b59ac40db28327a65
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:32a461d8ea341926133857f586dd602f7fe85c608ad93e46d07be7298fb5a6cb
     args:
     - "--conf"
     - "/etc/coredns/Corefile"
@@ -66,6 +69,33 @@ spec:
       successThreshold: 1
       failureThreshold: 5
     terminationMessagePolicy: FallbackToLogsOnError
+    imagePullPolicy: IfNotPresent
+  - name: coredns-monitor
+    securityContext:
+      privileged: true
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:2ce9667775acdefcff0a90199c2b87b001b98d7ea5b5e7ed18453ba47b318235
+    command:
+    - corednsmonitor
+    - "/var/lib/kubelet/kubeconfig"
+    - "/config/Corefile.tmpl"
+    - "/etc/coredns/Corefile"
+    - "--api-vip"
+    - "172.21.104.13"
+    - "--ingress-vip"
+    - "172.21.104.14"
+    resources:
+      requests:
+        cpu: 100m
+        memory: 200Mi
+    volumeMounts:
+    - name: kubeconfig
+      mountPath: "/var/lib/kubelet"
+    - name: resource-dir
+      mountPath: "/config"
+    - name: conf-dir
+      mountPath: "/etc/coredns"
+    - name: nm-resolv
+      mountPath: "/var/run/NetworkManager"
     imagePullPolicy: IfNotPresent
   hostNetwork: true
   tolerations:

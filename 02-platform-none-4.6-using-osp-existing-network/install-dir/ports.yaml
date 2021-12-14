@@ -1,0 +1,39 @@
+# Required Python packages:
+#
+# ansible
+# openstackclient
+# openstacksdk
+# netaddr
+
+- import_playbook: common.yaml
+
+- hosts: all
+  gather_facts: no
+
+  tasks:
+  - name: 'Create the Control Plane outbound ports'
+    os_port:
+      name: "outbound-{{ item.1 }}-{{ item.0 }}"
+      network: ocp30_outbound
+      security_groups:
+      - "{{ os_sg_master }}"
+    with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
+    register: portsoutbound
+
+  - name: 'Create the Control Plane public ports'
+    os_port:
+      name: "public-{{ item.1 }}-{{ item.0 }}"
+      network: ocp30_public
+      security_groups:
+      - "{{ os_sg_master }}"
+    with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
+    register: portspublic
+
+  - name: 'Create the Control Plane management ports'
+    os_port:
+      name: "management-{{ item.1 }}-{{ item.0 }}"
+      network: ocp30_management
+      security_groups:
+      - "{{ os_sg_master }}"
+    with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
+    register: portsmanagement

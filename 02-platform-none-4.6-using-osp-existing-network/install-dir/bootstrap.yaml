@@ -36,7 +36,7 @@
       image: "{{ os_image_rhcos }}"
       flavor: "{{ os_flavor_master }}"
       userdata: "{{ lookup('file', os_bootstrap_ignition) | string }}"
-      floating_ips: "{{ os_bootstrap_fip | default(omit) }}"
+      # floating_ips: "{{ os_bootstrap_fip | default(omit) }}"
       auto_ip: "{{ bootstrap_auto_ip | default(omit) }}"
       nics:
       - port-name: "{{ os_port_bootstrap }}"
