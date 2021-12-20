@@ -15,6 +15,7 @@
     os_port:
       name: "{{ os_port_bootstrap }}"
       network: "{{ os_network }}"
+      fixed_ips: next_nth_usable(2)
       security_groups:
       - "{{ os_sg_master }}"
       allowed_address_pairs:
