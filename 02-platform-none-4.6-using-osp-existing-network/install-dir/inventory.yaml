@@ -49,3 +49,8 @@ all:
       # attached to the bootstrap machine. This is needed for collecting logs
       # in case of install failure.
       os_bootstrap_fip: '172.21.104.70'
+      
+      ocp30_cluster_subnet_range: 172.21.104.0/26
+      ocp30_outbound_subnet_range: 172.21.105.192/26
+      ocp30_public_subnet_range: 172.21.112.0/27
+      ocp30_management_subnet_range: 172.21.104.64/26

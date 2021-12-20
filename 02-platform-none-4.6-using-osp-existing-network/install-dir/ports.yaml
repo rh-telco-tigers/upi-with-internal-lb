@@ -15,6 +15,8 @@
     os_port:
       name: "outbound-{{ item.1 }}-{{ item.0 }}"
       network: ocp30_outbound
+      fixed_ips: 
+      - ip_address: "{{ ocp30_outbound_subnet_range | next_nth_usable( item.0 + 6 ) }}"
       security_groups:
       - "{{ os_sg_master }}"
     with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
@@ -24,6 +26,8 @@
     os_port:
       name: "public-{{ item.1 }}-{{ item.0 }}"
       network: ocp30_public
+      fixed_ips: 
+      - ip_address: "{{ ocp30_public_subnet_range | next_nth_usable( item.0 + 6 ) }}"
       security_groups:
       - "{{ os_sg_master }}"
     with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
@@ -33,6 +37,8 @@
     os_port:
       name: "management-{{ item.1 }}-{{ item.0 }}"
       network: ocp30_management
+      fixed_ips: 
+      - ip_address: "{{ ocp30_management_subnet_range | next_nth_usable( item.0 + 6 ) }}"
       security_groups:
       - "{{ os_sg_master }}"
     with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
@@ -43,7 +49,7 @@
       name: "{{ item.1 }}-{{ item.0 }}"
       network: "{{ os_network }}"
       fixed_ips: 
-      - ip_address: "{{ os_subnet_range | next_nth_usable({{ item.0 + 6 }}) }}"
+      - ip_address: "{{ os_subnet_range | next_nth_usable( item.0 + 6 ) }}"
       security_groups:
       - "{{ os_sg_master }}"
       allowed_address_pairs:
