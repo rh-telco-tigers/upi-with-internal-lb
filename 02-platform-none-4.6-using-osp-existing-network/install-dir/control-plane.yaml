@@ -70,26 +70,26 @@
   #     cmd: "openstack server group list -f json -c ID -c Name"
   #   register: server_group_list
 
-  # - name: 'Parse the Server group ID from existing'
-  #   set_fact:
-  #     server_group_id: "{{ (server_group_list.stdout | from_json | json_query(list_query) | first).ID }}"
-  #   vars:
-  #     list_query: "[?Name=='{{ os_cp_server_group_name }}']"
-  #   when:
-  #   - "os_cp_server_group_name|string in server_group_list.stdout"
+  - name: 'Parse the Server group ID from existing'
+    set_fact:
+      server_group_id: "{{ (server_group_list.stdout | from_json | json_query(list_query) | first).ID }}"
+    vars:
+      list_query: "[?Name=='{{ os_cp_server_group_name }}']"
+    when:
+    - "os_cp_server_group_name|string in server_group_list.stdout"
 
-  # - name: 'Create the Control Plane server group'
-  #   command:
-  #     cmd: "openstack --os-compute-api-version=2.15 server group create -f json -c id --policy=soft-anti-affinity {{ os_cp_server_group_name }}"
-  #   register: server_group_created
-  #   when:
-  #   - server_group_id is not defined
+  - name: 'Create the Control Plane server group'
+    command:
+      cmd: "openstack --os-compute-api-version=2.15 server group create -f json -c id --policy=soft-anti-affinity {{ os_cp_server_group_name }}"
+    register: server_group_created
+    when:
+    - server_group_id is not defined
 
-  # - name: 'Parse the Server group ID from creation'
-  #   set_fact:
-  #     server_group_id: "{{ (server_group_created.stdout | from_json).id }}"
-  #   when:
-  #   - server_group_id is not defined
+  - name: 'Parse the Server group ID from creation'
+    set_fact:
+      server_group_id: "{{ (server_group_created.stdout | from_json).id }}"
+    when:
+    - server_group_id is not defined
 
   - name: 'Create the Control Plane servers'
     os_server:
