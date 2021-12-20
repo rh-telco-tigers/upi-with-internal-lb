@@ -1,8 +1,8 @@
 # Created by cloud-init on instance boot automatically, do not edit.
 #
 BOOTPROTO=none
-DEVICE=ens6
-IPADDR=172.21.112.7
+DEVICE=ens5
+IPADDR=172.21.112.6
 NETMASK=255.255.255.224
 ONBOOT=yes
 TYPE=Ethernet
