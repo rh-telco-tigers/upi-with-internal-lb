@@ -42,7 +42,7 @@
     os_port:
       name: "{{ item.1 }}-{{ item.0 }}"
       network: "{{ os_network }}"
-      fixed_ips: next_nth_usable({{ item.0 + 6 }})
+      fixed_ips: "{{ os_subnet_range | next_nth_usable({{ item.0 + 6 }}) }}"
       security_groups:
       - "{{ os_sg_master }}"
       allowed_address_pairs:
