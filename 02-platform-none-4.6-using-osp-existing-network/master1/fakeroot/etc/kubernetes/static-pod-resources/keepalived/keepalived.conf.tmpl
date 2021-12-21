@@ -68,6 +68,36 @@ vrrp_instance {{ .Cluster.Name }}_API {
     }
 }
 
+
+vrrp_instance {{ .Cluster.Name }}_API_EXTERNAL {
+    state BACKUP
+    interface ens5
+    virtual_router_id {{ .Cluster.APIVirtualRouterID }}
+    priority 40
+    advert_int 1
+    {{if .EnableUnicast}}
+    unicast_src_ip {{.NonVirtualIP}}
+    unicast_peer {
+        {{ .BootstrapIP }}
+        {{range .LBConfig.Backends}}
+        {{if ne $nonVirtualIP .Address}}{{.Address}}{{end}}
+        {{end}}
+    }
+    {{end}}
+    authentication {
+        auth_type PASS
+        auth_pass {{ .Cluster.Name }}_api_vip
+    }
+    virtual_ipaddress {
+        172.21.112.13/32
+    }
+    track_script {
+        chk_ocp_lb
+        chk_ocp_both
+    }
+}
+
+
 vrrp_instance {{ .Cluster.Name }}_INGRESS {
     state BACKUP
     interface {{ .VRRPInterface }}
