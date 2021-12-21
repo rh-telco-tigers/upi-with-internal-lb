@@ -30,6 +30,9 @@
       - ip_address: "{{ ocp30_public_subnet_range | next_nth_usable( item.0 + 6 ) }}"
       security_groups:
       - "{{ os_sg_master }}"
+      allowed_address_pairs:
+      - ip_address: "{{ ocp30_public_subnet_range | next_nth_usable(13) }}"
+      - ip_address: "{{ ocp30_public_subnet_range | next_nth_usable(14) }}"
     with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
     register: portspublic
 
