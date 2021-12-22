@@ -31,7 +31,7 @@ spec:
     - "--api-vip"
     - "172.21.104.13"
     - "--ingress-vip"
-    - "172.21.104.14"
+    - "172.21.105.201"
     - "/config"
     - "--out-dir"
     - "/etc/keepalived"
