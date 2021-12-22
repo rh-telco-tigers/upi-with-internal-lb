@@ -20,10 +20,10 @@
       security_groups:
       - "{{ os_sg_master }}"
       allowed_address_pairs:
-      - ip_address: "{{ ocp30_outbound_subnet_range | next_nth_usable(198) }}"
-      - ip_address: "{{ ocp30_outbound_subnet_range | next_nth_usable(199) }}"
-      - ip_address: "{{ ocp30_outbound_subnet_range | next_nth_usable(200) }}"
-      - ip_address: "{{ ocp30_outbound_subnet_range | next_nth_usable(201) }}"
+      - ip_address: "{{ ocp30_outbound_subnet_range | next_nth_usable(6) }}"
+      - ip_address: "{{ ocp30_outbound_subnet_range | next_nth_usable(7) }}"
+      - ip_address: "{{ ocp30_outbound_subnet_range | next_nth_usable(8) }}"
+      - ip_address: "{{ ocp30_outbound_subnet_range | next_nth_usable(9) }}"
     with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
     register: portsoutbound
 
