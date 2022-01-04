@@ -8,7 +8,7 @@
     reload
     template IN {{ .Cluster.IngressVIPRecordType }} ocp300.nfvdev.tlabs.ca {
         match .*.apps.ocp300.nfvdev.tlabs.ca
-        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.105.201"
+        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.112.14"
         fallthrough
     }
     template IN {{ .Cluster.IngressVIPEmptyType }} ocp300.nfvdev.tlabs.ca {

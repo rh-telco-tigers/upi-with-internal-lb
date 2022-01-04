@@ -82,7 +82,7 @@ spec:
     - "--api-vip"
     - "172.21.104.13"
     - "--ingress-vip"
-    - "172.21.105.201"
+    - "172.21.112.14"
     resources:
       requests:
         cpu: 100m
