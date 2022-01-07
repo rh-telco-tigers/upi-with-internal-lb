@@ -80,9 +80,9 @@ spec:
     - "/config/Corefile.tmpl"
     - "/etc/coredns/Corefile"
     - "--api-vip"
-    - "172.21.104.13"
+    - "172.21.104.25"
     - "--ingress-vip"
-    - "172.21.112.14"
+    - "172.21.112.26"
     resources:
       requests:
         cpu: 100m

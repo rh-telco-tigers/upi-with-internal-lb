@@ -22,7 +22,7 @@
       allowed_address_pairs:
       - ip_address: "{{ os_subnet_range | next_nth_usable(21) }}"
       - ip_address: "{{ os_subnet_range | next_nth_usable(22) }}"
-      - ip_address: "{{ os_subnet_range | next_nth_usable(23) }}"
+      - ip_address: "{{ os_subnet_range | next_nth_usable(25) }}"
 
   # - name: 'Set bootstrap port tag'
   #   command:

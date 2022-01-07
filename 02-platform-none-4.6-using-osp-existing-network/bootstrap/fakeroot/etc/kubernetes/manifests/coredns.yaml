@@ -31,9 +31,9 @@ spec:
     - render
     - "/etc/kubernetes/kubeconfig"
     - "--api-vip"
-    - "172.21.104.13"
+    - "172.21.104.25"
     - "--ingress-vip"
-    - "172.21.112.14"
+    - "172.21.112.26"
     - "/config"
     - "--out-dir"
     - "/etc/coredns"

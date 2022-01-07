@@ -32,13 +32,13 @@
       name: "public-{{ item.1 }}-{{ item.0 }}"
       network: ocp30_public
       fixed_ips: 
-      - ip_address: "{{ ocp30_public_subnet_range | next_nth_usable( item.0 + 16 ) }}"
+      - ip_address: "{{ ocp30_public_subnet_range | next_nth_usable( item.0 + 21 ) }}"
       security_groups:
       - "{{ os_sg_master }}"
       allowed_address_pairs:
-      - ip_address: "{{ ocp30_public_subnet_range | next_nth_usable(17) }}"
-      - ip_address: "{{ ocp30_public_subnet_range | next_nth_usable(19) }}"
-      - ip_address: "{{ ocp30_public_subnet_range | next_nth_usable(20) }}"
+      - ip_address: "{{ ocp30_public_subnet_range | next_nth_usable(21) }}"
+      - ip_address: "{{ ocp30_public_subnet_range | next_nth_usable(22) }}"
+      - ip_address: "{{ ocp30_public_subnet_range | next_nth_usable(25) }}"
     with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
     register: portspublic
 

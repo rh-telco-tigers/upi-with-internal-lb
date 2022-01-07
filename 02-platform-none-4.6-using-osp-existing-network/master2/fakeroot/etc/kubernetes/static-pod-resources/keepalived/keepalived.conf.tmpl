@@ -89,7 +89,7 @@ vrrp_instance {{ .Cluster.Name }}_API_EXTERNAL {
         auth_pass {{ .Cluster.Name }}_api_vip
     }
     virtual_ipaddress {
-        172.21.112.13/32
+        172.21.112.25/32
     }
     track_script {
         chk_ocp_lb
