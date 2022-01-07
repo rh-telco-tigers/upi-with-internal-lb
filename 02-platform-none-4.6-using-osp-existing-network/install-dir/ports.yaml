@@ -46,7 +46,7 @@
       name: "management-{{ item.1 }}-{{ item.0 }}"
       network: ocp30_management
       fixed_ips: 
-      - ip_address: "{{ ocp30_management_subnet_range | next_nth_usable( item.0 + 6 ) }}"
+      - ip_address: "{{ ocp30_management_subnet_range | next_nth_usable( item.0 + 16 ) }}"
       security_groups:
       - "{{ os_sg_master }}"
     with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
