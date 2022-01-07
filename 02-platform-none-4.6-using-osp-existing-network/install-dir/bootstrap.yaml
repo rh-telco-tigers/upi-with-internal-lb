@@ -16,12 +16,13 @@
       name: "{{ os_port_bootstrap }}"
       network: "{{ os_network }}"
       fixed_ips: 
-      - ip_address: "{{ os_subnet_range | next_nth_usable(2) }}"
+      - ip_address: "{{ os_subnet_range | next_nth_usable(20) }}"
       security_groups:
       - "{{ os_sg_master }}"
       allowed_address_pairs:
-      - ip_address: "{{ os_subnet_range | next_nth_usable(13) }}"
-      - ip_address: "{{ os_subnet_range | next_nth_usable(14) }}"
+      - ip_address: "{{ os_subnet_range | next_nth_usable(21) }}"
+      - ip_address: "{{ os_subnet_range | next_nth_usable(22) }}"
+      - ip_address: "{{ os_subnet_range | next_nth_usable(23) }}"
 
   # - name: 'Set bootstrap port tag'
   #   command:
