@@ -58,7 +58,7 @@
       name: "{{ item.1 }}-{{ item.0 }}"
       network: "{{ os_network }}"
       fixed_ips: 
-      - ip_address: "{{ os_subnet_range | next_nth_usable( item.0 + 20 ) }}"
+      - ip_address: "{{ os_subnet_range | next_nth_usable( item.0 + 21 ) }}"
       security_groups:
       - "{{ os_sg_master }}"
       allowed_address_pairs:
