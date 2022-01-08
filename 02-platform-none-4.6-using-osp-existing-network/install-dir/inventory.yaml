@@ -6,7 +6,7 @@ all:
 
       # User-provided values
       os_subnet_range: '172.21.104.0/26'
-      os_flavor_master: '6-12G-120'
+      os_flavor_master: 'hoomantest'
       os_flavor_worker: '6-12G-120'
       os_image_rhcos: 'rhcos-openstack.4.6.47.x86_64.qcow2'
       # Service subnet cidr
