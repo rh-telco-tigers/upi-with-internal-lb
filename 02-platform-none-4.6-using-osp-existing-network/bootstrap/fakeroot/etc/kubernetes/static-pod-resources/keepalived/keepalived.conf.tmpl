@@ -8,16 +8,8 @@ vrrp_instance {{.Cluster.Name}}_API {
     state BACKUP
     interface {{.VRRPInterface}}
     virtual_router_id {{.Cluster.APIVirtualRouterID }}
-    priority 70
+    priority 50
     advert_int 1
-    {{ if .EnableUnicast }}
-    unicast_src_ip {{.NonVirtualIP}}
-    unicast_peer {
-        {{range .LBConfig.Backends -}}
-        {{.Address}}
-        {{end}}
-    }
-    {{end}}
     authentication {
         auth_type PASS
         auth_pass {{.Cluster.Name}}_api_vip
