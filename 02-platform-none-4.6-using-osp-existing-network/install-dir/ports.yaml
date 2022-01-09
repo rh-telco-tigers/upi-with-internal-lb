@@ -39,6 +39,7 @@
       - ip_address: "{{ ocp30_public_subnet_range | next_nth_usable(21) }}"
       - ip_address: "{{ ocp30_public_subnet_range | next_nth_usable(22) }}"
       - ip_address: "{{ ocp30_public_subnet_range | next_nth_usable(25) }}"
+      - ip_address: "{{ ocp30_public_subnet_range | next_nth_usable(26) }}"
     with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
     register: portspublic
 
