@@ -8,8 +8,6 @@ metadata:
   deletionGracePeriodSeconds: 65
   labels:
     app: openstack-infra-mdns
-  annotations:
-    target.workload.openshift.io/management: '{"effect": "PreferredDuringScheduling"}'
 spec:
   volumes:
   - name: resource-dir
@@ -25,7 +23,7 @@ spec:
       path: "/opt/openshift/manifests"
   initContainers:
   - name: render-config
-    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:2ce9667775acdefcff0a90199c2b87b001b98d7ea5b5e7ed18453ba47b318235
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:25347d5b82db978e8591633224323766bf9d8b185e1953552a1dd008e3354ead
     command:
     - runtimecfg
     - render
@@ -54,7 +52,7 @@ spec:
   - name: coredns
     securityContext:
       privileged: true
-    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:32a461d8ea341926133857f586dd602f7fe85c608ad93e46d07be7298fb5a6cb
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:a47ac275c5b2decd7521968198f9e86916891bce1d49bb4a5e985a2e575b5a6b
     args:
     - "--conf"
     - "/etc/coredns/Corefile"
@@ -65,6 +63,16 @@ spec:
     volumeMounts:
     - name: conf-dir
       mountPath: "/etc/coredns"
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 18080
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      failureThreshold: 3
+      timeoutSeconds: 10
     livenessProbe:
       httpGet:
         path: /health
