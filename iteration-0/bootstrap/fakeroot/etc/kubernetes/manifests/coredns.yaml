@@ -29,7 +29,7 @@ spec:
     - render
     - "/etc/kubernetes/kubeconfig"
     - "--api-vip"
-    - "172.21.104.25"
+    - "172.21.105.211"
     - "--ingress-vip"
     - "172.21.104.26"
     - "/config"
