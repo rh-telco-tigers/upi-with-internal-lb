@@ -127,7 +127,7 @@ vrrp_instance {{ .Cluster.Name }}_INGRESS {
 vrrp_instance {{ .Cluster.Name }}_INGRESS_EXTERNAL {
     state BACKUP
     interface {{ .VRRPInterface }}
-    virtual_router_id {{ .Cluster.IngressVirtualRouterID }}
+    virtual_router_id 36
     priority 40
     advert_int 1
     {{if .EnableUnicast}}
