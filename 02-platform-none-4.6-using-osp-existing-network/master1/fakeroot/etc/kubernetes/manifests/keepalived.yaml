@@ -39,7 +39,7 @@ spec:
     - "--api-vip"
     - "172.21.104.25"
     - "--ingress-vip"
-    - "172.21.112.26"
+    - "172.21.104.26"
     - "/config"
     - "--out-dir"
     - "/etc/keepalived"
@@ -131,7 +131,7 @@ spec:
     - "--api-vip"
     - "172.21.104.25"
     - "--ingress-vip"
-    - "172.21.112.26"
+    - "172.21.104.26"
     resources:
       requests:
         cpu: 100m
