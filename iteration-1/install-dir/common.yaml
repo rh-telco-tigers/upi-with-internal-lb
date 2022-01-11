@@ -10,9 +10,8 @@
       cluster_id_tag: "openshiftClusterID={{ infraID }}"
       primary_cluster_network_tag: "{{ infraID }}-primaryClusterNetwork"
       os_infra_id: "{{ infraID }}"
-      os_boostrap_network: "ocp30_outbound"
-      os_network: "ocp30_outbound"
-      os_subnet: "ocp30_outbound"
+      os_network: "ocp30_cluster"
+      os_subnet: "ocp30_cluster"
       os_router: "{{ infraID }}-external-router"
       # Port names
       os_port_api: "{{ infraID }}-api-port"

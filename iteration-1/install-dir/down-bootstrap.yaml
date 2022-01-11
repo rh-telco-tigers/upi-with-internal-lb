@@ -18,8 +18,3 @@
     os_port:
       name: "{{ os_port_bootstrap }}"
       state: absent
-
-  - name: 'Remove the bootstrap server port'
-    os_port:
-      name: "outbound-{{ os_port_bootstrap }}"
-      state: absent

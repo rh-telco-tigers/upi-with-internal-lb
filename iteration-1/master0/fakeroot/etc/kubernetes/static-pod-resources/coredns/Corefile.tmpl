@@ -9,7 +9,7 @@
     reload
     template IN {{ .Cluster.IngressVIPRecordType }} ocp300.nfvdev.tlabs.ca {
         match .*.apps.ocp300.nfvdev.tlabs.ca
-        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.105.212"
+        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.104.26"
         fallthrough
     }
     template IN {{ .Cluster.IngressVIPEmptyType }} ocp300.nfvdev.tlabs.ca {
@@ -18,7 +18,7 @@
     }
     template IN {{ .Cluster.APIVIPRecordType }} ocp300.nfvdev.tlabs.ca {
         match api.ocp300.nfvdev.tlabs.ca
-        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.105.211"
+        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.104.25"
         fallthrough
     }
     template IN {{ .Cluster.APIVIPEmptyType }} ocp300.nfvdev.tlabs.ca {
@@ -27,7 +27,7 @@
     }
     template IN {{ .Cluster.APIVIPRecordType }} ocp300.nfvdev.tlabs.ca {
         match api-int.ocp300.nfvdev.tlabs.ca
-        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.105.211"
+        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.104.25"
         fallthrough
     }
     template IN {{ .Cluster.APIVIPEmptyType }} ocp300.nfvdev.tlabs.ca {

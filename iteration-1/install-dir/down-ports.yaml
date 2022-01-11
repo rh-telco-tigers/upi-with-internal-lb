@@ -40,21 +40,3 @@
       name: "{{ item.1 }}-{{ item.0 }}"
       state: absent
     with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
-
-  - name: 'outbound: Remove the Control Plane ports'
-    os_port:
-      name: "outbound-{{ item.1 }}-{{ item.0 }}"
-      state: absent
-    with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
-
-  - name: 'public: Remove the Control Plane ports'
-    os_port:
-      name: "public-{{ item.1 }}-{{ item.0 }}"
-      state: absent
-    with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
-
-  - name: 'management: Remove the Control Plane ports'
-    os_port:
-      name: "management-{{ item.1 }}-{{ item.0 }}"
-      state: absent
-    with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
