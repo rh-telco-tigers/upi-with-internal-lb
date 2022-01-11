@@ -23,6 +23,7 @@
       - ip_address: "{{ os_subnet_range | next_nth_usable(21) }}"
       - ip_address: "{{ os_subnet_range | next_nth_usable(22) }}"
       - ip_address: "{{ os_subnet_range | next_nth_usable(25) }}"
+      - ip_address: "{{ ocp30_outbound_subnet_range | next_nth_usable(19) }}"
 
   - name: 'Create the bootstrap outbound port'
     os_port:
