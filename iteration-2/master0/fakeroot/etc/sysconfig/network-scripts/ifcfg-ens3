@@ -1,5 +1,5 @@
 BOOTPROTO=none
-DEFROUTE=no
+DEFROUTE=yes
 NAME=ens3
 DEVICE=ens3
 ONBOOT=yes
