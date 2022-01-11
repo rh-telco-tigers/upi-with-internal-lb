@@ -29,9 +29,9 @@ spec:
     - render
     - "/var/lib/kubelet/kubeconfig"
     - "--api-vip"
-    - "10.0.0.5"
+    - "172.21.104.25"
     - "--ingress-vip"
-    - "10.0.0.7"
+    - "172.21.104.26"
     - "/config"
     - "--out-dir"
     - "/etc/coredns"

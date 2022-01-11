@@ -1,3 +1,4 @@
+---
 kind: Pod
 apiVersion: v1
 metadata:
@@ -14,41 +15,44 @@ spec:
       path: "/etc/kubernetes/static-pod-resources/coredns"
   - name: kubeconfig
     hostPath:
-      path: "/var/lib/kubelet"
+      path: "/etc/kubernetes/kubeconfig"
   - name: conf-dir
+    empty-dir: {}
+  - name: manifests
     hostPath:
-      path: "/etc/coredns"
-  - name: nm-resolv
-    hostPath:
-      path: "/var/run/NetworkManager"
+      path: "/opt/openshift/manifests"
   initContainers:
-  - name: render-config-coredns
-    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:2ce9667775acdefcff0a90199c2b87b001b98d7ea5b5e7ed18453ba47b318235
+  - name: render-config
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:25347d5b82db978e8591633224323766bf9d8b185e1953552a1dd008e3354ead
     command:
     - runtimecfg
     - render
-    - "/var/lib/kubelet/kubeconfig"
+    - "/etc/kubernetes/kubeconfig"
     - "--api-vip"
-    - "172.21.104.25"
+    - "172.21.105.211"
     - "--ingress-vip"
-    - "172.21.104.26"
+    - "172.21.105.212"
     - "/config"
     - "--out-dir"
     - "/etc/coredns"
+    - "--cluster-config"
+    - "/opt/openshift/manifests/cluster-config.yaml"
     resources: {}
     volumeMounts:
     - name: kubeconfig
-      mountPath: "/var/lib/kubelet"
+      mountPath: "/etc/kubernetes/kubeconfig"
     - name: resource-dir
       mountPath: "/config"
     - name: conf-dir
       mountPath: "/etc/coredns"
+    - name: manifests
+      mountPath: "/opt/openshift/manifests"
     imagePullPolicy: IfNotPresent
   containers:
   - name: coredns
     securityContext:
       privileged: true
-    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:32a461d8ea341926133857f586dd602f7fe85c608ad93e46d07be7298fb5a6cb
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:a47ac275c5b2decd7521968198f9e86916891bce1d49bb4a5e985a2e575b5a6b
     args:
     - "--conf"
     - "/etc/coredns/Corefile"
@@ -59,6 +63,16 @@ spec:
     volumeMounts:
     - name: conf-dir
       mountPath: "/etc/coredns"
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 18080
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      failureThreshold: 3
+      timeoutSeconds: 10
     livenessProbe:
       httpGet:
         path: /health
@@ -69,34 +83,6 @@ spec:
       successThreshold: 1
       failureThreshold: 5
     terminationMessagePolicy: FallbackToLogsOnError
-    imagePullPolicy: IfNotPresent
-  - name: coredns-monitor
-    securityContext:
-      privileged: true
-    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:2ce9667775acdefcff0a90199c2b87b001b98d7ea5b5e7ed18453ba47b318235
-    command:
-    - corednsmonitor
-    - "/var/lib/kubelet/kubeconfig"
-    - "/config/Corefile.tmpl"
-    - "/etc/coredns/Corefile"
-    - "--api-vip"
-    - "172.21.104.25"
-    - "--ingress-vip"
-    - "172.21.104.26"
-    resources:
-      requests:
-        cpu: 100m
-        memory: 200Mi
-    volumeMounts:
-    - name: kubeconfig
-      mountPath: "/var/lib/kubelet"
-    - name: resource-dir
-      mountPath: "/config"
-    - name: conf-dir
-      mountPath: "/etc/coredns"
-    - name: nm-resolv
-      mountPath: "/var/run/NetworkManager"
-    imagePullPolicy: IfNotPresent
   hostNetwork: true
   tolerations:
   - operator: Exists

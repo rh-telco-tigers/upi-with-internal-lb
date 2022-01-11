@@ -1,0 +1,14 @@
+. {
+    errors
+    health :18080
+    mdns ocp300.nfvdev.tlabs.ca {{.Cluster.MasterAmount}} {{.Cluster.Name}} {{.NonVirtualIP}}
+    forward . {{- range $upstream := .DNSUpstreams}} {{$upstream}}{{- end}} {
+        policy sequential
+    }
+    cache 30
+    reload
+    hosts /etc/coredns/api-int.hosts ocp300.nfvdev.tlabs.ca {
+        172.21.105.211 api-int.ocp300.nfvdev.tlabs.ca api.ocp300.nfvdev.tlabs.ca
+        fallthrough
+    }
+}

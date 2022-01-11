@@ -29,9 +29,9 @@ spec:
     - render
     - "/var/lib/kubelet/kubeconfig"
     - "--api-vip"
-    - "172.21.104.25"
+    - "172.21.105.211"
     - "--ingress-vip"
-    - "172.21.104.26"
+    - "172.21.105.212"
     - "/config"
     - "--out-dir"
     - "/etc/coredns"
@@ -80,9 +80,9 @@ spec:
     - "/config/Corefile.tmpl"
     - "/etc/coredns/Corefile"
     - "--api-vip"
-    - "172.21.104.25"
+    - "172.21.105.211"
     - "--ingress-vip"
-    - "172.21.104.26"
+    - "172.21.105.212"
     resources:
       requests:
         cpu: 100m

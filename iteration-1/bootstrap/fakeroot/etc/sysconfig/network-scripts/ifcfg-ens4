@@ -1,0 +1,13 @@
+# Created by cloud-init on instance boot automatically, do not edit.
+#
+BOOTPROTO=none
+DEFROUTE=yes
+NAME=ens4
+DEVICE=ens4
+ONBOOT=yes
+IPADDR=172.21.105.211
+PREFIX=26
+MTU=1500
+GATEWAY=172.21.105.193
+DNS1=205.206.214.249
+DNS2=209.20.8.249

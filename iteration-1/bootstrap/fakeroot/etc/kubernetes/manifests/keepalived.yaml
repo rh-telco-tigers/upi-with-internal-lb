@@ -2,17 +2,17 @@
 kind: Pod
 apiVersion: v1
 metadata:
-  name: coredns
+  name: keepalived
   namespace: openshift-openstack-infra
   creationTimestamp:
   deletionGracePeriodSeconds: 65
   labels:
-    app: openstack-infra-mdns
+    app: openstack-infra-vrrp
 spec:
   volumes:
   - name: resource-dir
     hostPath:
-      path: "/etc/kubernetes/static-pod-resources/coredns"
+      path: "/etc/kubernetes/static-pod-resources/keepalived"
   - name: kubeconfig
     hostPath:
       path: "/etc/kubernetes/kubeconfig"
@@ -29,60 +29,51 @@ spec:
     - render
     - "/etc/kubernetes/kubeconfig"
     - "--api-vip"
-    - "172.21.104.25"
+    - "172.21.105.211"
     - "--ingress-vip"
-    - "172.21.104.26"
+    - "172.21.105.212"
     - "/config"
     - "--out-dir"
-    - "/etc/coredns"
+    - "/etc/keepalived"
     - "--cluster-config"
     - "/opt/openshift/manifests/cluster-config.yaml"
     resources: {}
     volumeMounts:
-    - name: kubeconfig
-      mountPath: "/etc/kubernetes/kubeconfig"
     - name: resource-dir
       mountPath: "/config"
+    - name: kubeconfig
+      mountPath: "/etc/kubernetes/kubeconfig"
     - name: conf-dir
-      mountPath: "/etc/coredns"
+      mountPath: "/etc/keepalived"
     - name: manifests
       mountPath: "/opt/openshift/manifests"
     imagePullPolicy: IfNotPresent
   containers:
-  - name: coredns
+  - name: keepalived
     securityContext:
       privileged: true
-    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:a47ac275c5b2decd7521968198f9e86916891bce1d49bb4a5e985a2e575b5a6b
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:6e95ab4208120d1a002197d402736ec5ab2317f60d5e5c5a4238175e444da933
+    env:
+      - name: NSS_SDB_USE_CACHE
+        value: "no"
+    command:
+    - /usr/sbin/keepalived
     args:
-    - "--conf"
-    - "/etc/coredns/Corefile"
+    - "-f"
+    - "/etc/keepalived/keepalived.conf"
+    - "--dont-fork"
+    - "--vrrp"
+    - "--log-detail"
+    - "--log-console"
     resources:
       requests:
         cpu: 100m
         memory: 200Mi
     volumeMounts:
     - name: conf-dir
-      mountPath: "/etc/coredns"
-    readinessProbe:
-      httpGet:
-        path: /health
-        port: 18080
-        scheme: HTTP
-      initialDelaySeconds: 10
-      periodSeconds: 10
-      successThreshold: 1
-      failureThreshold: 3
-      timeoutSeconds: 10
-    livenessProbe:
-      httpGet:
-        path: /health
-        port: 18080
-        scheme: HTTP
-      initialDelaySeconds: 60
-      timeoutSeconds: 5
-      successThreshold: 1
-      failureThreshold: 5
+      mountPath: "/etc/keepalived"
     terminationMessagePolicy: FallbackToLogsOnError
+    imagePullPolicy: IfNotPresent
   hostNetwork: true
   tolerations:
   - operator: Exists
