@@ -54,7 +54,7 @@
       flavor: "{{ os_flavor_master }}"
       userdata: "{{ lookup('file', os_bootstrap_ignition) | string }}"
       # floating_ips: "{{ os_bootstrap_fip | default(omit) }}"
-      auto_ip: "{{ bootstrap_auto_ip | default(omit) }}"
+      auto_ip: no
       nics:
       - port-name: "{{ os_port_bootstrap }}"
       - port-name: "outbound-{{ os_port_bootstrap }}"
