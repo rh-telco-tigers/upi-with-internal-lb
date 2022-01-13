@@ -70,7 +70,7 @@ vrrp_instance {{ .Cluster.Name }}_API {
 
 
 vrrp_instance {{ .Cluster.Name }}_API_EXTERNAL {
-    state BACKUP
+    state SLAVE
     interface ens4
     virtual_router_id 117
     priority 40
@@ -90,10 +90,6 @@ vrrp_instance {{ .Cluster.Name }}_API_EXTERNAL {
     }
     virtual_ipaddress {
         172.21.112.25/32
-    }
-    track_script {
-        chk_ocp_lb
-        chk_ocp_both
     }
 }
 
@@ -118,32 +114,6 @@ vrrp_instance {{ .Cluster.Name }}_INGRESS {
     }
     virtual_ipaddress {
         {{ .Cluster.IngressVIP }}/{{ .Cluster.VIPNetmask }}
-    }
-    track_script {
-        chk_ingress
-    }
-}
-
-vrrp_instance {{ .Cluster.Name }}_INGRESS_EXTERNAL {
-    state BACKUP
-    interface ens4
-    virtual_router_id 36
-    priority 40
-    advert_int 1
-    {{if .EnableUnicast}}
-    unicast_src_ip {{.NonVirtualIP}}
-    unicast_peer {
-        {{range .IngressConfig.Peers}}
-        {{if ne $nonVirtualIP .}}{{.}}{{end}}
-        {{end}}
-    }
-    {{end}}
-    authentication {
-        auth_type PASS
-        auth_pass {{ .Cluster.Name }}_ingress_vip
-    }
-    virtual_ipaddress {
-        172.21.112.26/32
     }
     track_script {
         chk_ingress
