@@ -71,7 +71,7 @@ vrrp_instance {{ .Cluster.Name }}_API {
 
 vrrp_instance {{ .Cluster.Name }}_API_EXTERNAL {
     state BACKUP
-    interface {{ .VRRPInterface }}
+    interface ens4
     virtual_router_id 117
     priority 40
     advert_int 1
@@ -125,7 +125,7 @@ vrrp_instance {{ .Cluster.Name }}_INGRESS {
 
 vrrp_instance {{ .Cluster.Name }}_INGRESS_EXTERNAL {
     state BACKUP
-    interface {{ .VRRPInterface }}
+    interface ens4
     virtual_router_id 36
     priority 40
     advert_int 1
