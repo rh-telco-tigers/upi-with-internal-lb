@@ -46,3 +46,9 @@
       name: "public-{{ item.1 }}-{{ item.0 }}"
       state: absent
     with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
+
+  - name: 'Management: Remove the Control Plane ports'
+    os_port:
+      name: "management-{{ item.1 }}-{{ item.0 }}"
+      state: absent
+    with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
