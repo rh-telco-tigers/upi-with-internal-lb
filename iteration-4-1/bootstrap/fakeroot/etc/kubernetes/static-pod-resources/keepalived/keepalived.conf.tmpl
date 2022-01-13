@@ -4,19 +4,6 @@
 # For more information, see installer/data/data/bootstrap/baremetal/README.md
 # in the installer repo.
 
-global_defs {
-    enable_script_security
-    script_user root
-}
-
-vrrp_script chk_api {
-    script "/usr/bin/timeout 1.9 /usr/bin/curl -o /dev/null -kLfs https://localhost:6443/readyz"
-    interval 2
-    weight 20
-    rise 3
-    fall 2
-}
-
 vrrp_instance {{.Cluster.Name}}_API {
     state BACKUP
     interface {{.VRRPInterface}}
@@ -29,8 +16,5 @@ vrrp_instance {{.Cluster.Name}}_API {
     }
     virtual_ipaddress {
         {{ .Cluster.APIVIP }}/{{ .Cluster.VIPNetmask }}
-    }
-    track_script {
-        chk_api
     }
 }
