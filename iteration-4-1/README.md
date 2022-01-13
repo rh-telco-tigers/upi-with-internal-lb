@@ -95,3 +95,22 @@ console-5c6fd4cd9b-wv5jp     1/1     Running   1          6m43s
 downloads-59cc69bd8d-qws9r   1/1     Running   0          17m
 downloads-59cc69bd8d-w8htr   1/1     Running   0          17m
 ```
+
+
+```
+[root@ocp300-pkr4x-bootstrap core]# oc get nodes -o wide
+NAME                    STATUS     ROLES    AGE     VERSION           INTERNAL-IP      EXTERNAL-IP   OS-IMAGE                                                       KERNEL-VERSION                 CONTAINER-RUNTIME
+ocp300-pkr4x-master-0   Ready      master   6m2s    v1.19.0+d5ed12c   172.21.105.208   <none>        Red Hat Enterprise Linux CoreOS 46.82.202110041927-0 (Ootpa)   4.18.0-193.65.2.el8_2.x86_64   cri-o://1.19.4-3.rhaos4.6.git7d25e5d.el8
+ocp300-pkr4x-master-1   NotReady   master   4m13s   v1.19.0+d5ed12c   172.21.105.209   <none>        Red Hat Enterprise Linux CoreOS 46.82.202110041927-0 (Ootpa)   4.18.0-193.65.2.el8_2.x86_64   cri-o://1.19.4-3.rhaos4.6.git7d25e5d.el8
+ocp300-pkr4x-master-2   NotReady   master   2m42s   v1.19.0+d5ed12c   172.21.105.210   <none>        Red Hat Enterprise Linux CoreOS 46.82.202110041927-0 (Ootpa)   4.18.0-193.65.2.el8_2.x86_64   cri-o://1.19.4-3.rhaos4.6.git7d25e5d.el8
+```
+
+```
+[core@ocp300-pkr4x-master-0 ~]$ host ocp300-pkr4x-master-0  127.0.0.1
+Using domain server:
+Name: 127.0.0.1
+Address: 127.0.0.1#53
+Aliases: 
+
+ocp300-pkr4x-master-0.ocp300.nfvdev.tlabs.ca has address 172.21.105.208
+```
