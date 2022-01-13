@@ -41,7 +41,7 @@ vrrp_script chk_ingress {
 {{$nonVirtualIP := .NonVirtualIP}}
 
 vrrp_instance {{ .Cluster.Name }}_API {
-    state BACKUP
+    state MASTER
     interface {{ .VRRPInterface }}
     virtual_router_id {{ .Cluster.APIVirtualRouterID }}
     priority 40
@@ -94,7 +94,7 @@ vrrp_instance {{ .Cluster.Name }}_API_EXTERNAL {
 }
 
 vrrp_instance {{ .Cluster.Name }}_INGRESS {
-    state BACKUP
+    state MASTER
     interface {{ .VRRPInterface }}
     virtual_router_id {{ .Cluster.IngressVirtualRouterID }}
     priority 40
