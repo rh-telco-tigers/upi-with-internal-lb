@@ -46,7 +46,6 @@ vrrp_instance {{ .Cluster.Name }}_API {
     virtual_router_id {{ .Cluster.APIVirtualRouterID }}
     priority 40
     advert_int 1
-    use_vmac
     {{if .EnableUnicast}}
     unicast_src_ip {{.NonVirtualIP}}
     unicast_peer {
@@ -76,7 +75,6 @@ vrrp_instance {{ .Cluster.Name }}_API_EXTERNAL {
     virtual_router_id 117
     priority 40
     advert_int 1
-    use_vmac
     {{if .EnableUnicast}}
     unicast_src_ip {{.NonVirtualIP}}
     unicast_peer {
@@ -102,7 +100,6 @@ vrrp_instance {{ .Cluster.Name }}_INGRESS {
     virtual_router_id {{ .Cluster.IngressVirtualRouterID }}
     priority 40
     advert_int 1
-    use_vmac
     {{if .EnableUnicast}}
     unicast_src_ip {{.NonVirtualIP}}
     unicast_peer {
