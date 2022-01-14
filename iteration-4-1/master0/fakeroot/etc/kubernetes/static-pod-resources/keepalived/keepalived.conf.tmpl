@@ -44,7 +44,7 @@ vrrp_instance {{ .Cluster.Name }}_API {
     state MASTER
     interface {{ .VRRPInterface }}
     virtual_router_id {{ .Cluster.APIVirtualRouterID }}
-    priority 40
+    priority 45
     advert_int 1
     {{if .EnableUnicast}}
     unicast_src_ip {{.NonVirtualIP}}
@@ -73,7 +73,7 @@ vrrp_instance {{ .Cluster.Name }}_API_EXTERNAL {
     state MASTER
     interface ens4
     virtual_router_id 117
-    priority 40
+    priority 45
     advert_int 1
     {{if .EnableUnicast}}
     unicast_src_ip {{.NonVirtualIP}}
@@ -97,7 +97,7 @@ vrrp_instance {{ .Cluster.Name }}_INGRESS {
     state MASTER
     interface {{ .VRRPInterface }}
     virtual_router_id {{ .Cluster.IngressVirtualRouterID }}
-    priority 40
+    priority 45
     advert_int 1
     {{if .EnableUnicast}}
     unicast_src_ip {{.NonVirtualIP}}
