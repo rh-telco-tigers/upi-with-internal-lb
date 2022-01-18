@@ -1,3 +1,14 @@
+Red Hat Enterprise Linux CoreOS 46.82.202110041927-0
+  Part of OpenShift 4.6, RHCOS is a Kubernetes native operating system
+  managed by the Machine Config Operator (`clusteroperator/machine-config`).
+
+WARNING: Direct SSH access to machines is not recommended; instead,
+make configuration changes via `machineconfig` objects:
+  https://docs.openshift.com/container-platform/4.6/architecture/architecture-rhcos.html
+
+---
+Last login: Tue Jan 18 03:45:03 2022 from 209.20.8.47
+[core@ocp300-7fmxb-master-1 ~]$ cat /etc/kubernetes/static-pod-resources/keepalived/keepalived.conf.tmpl 
 global_defs {
     enable_script_security
     script_user root
@@ -41,62 +52,43 @@ vrrp_script chk_ingress {
 {{$nonVirtualIP := .NonVirtualIP}}
 
 vrrp_instance {{ .Cluster.Name }}_API {
-    state SLAVE
-    interface {{ .VRRPInterface }}
+    state BACKUP
+    interface br-ex
     virtual_router_id {{ .Cluster.APIVirtualRouterID }}
     priority 40
     advert_int 1
-    {{if .EnableUnicast}}
-    unicast_src_ip {{.NonVirtualIP}}
-    unicast_peer {
-        {{ .BootstrapIP }}
-        {{range .LBConfig.Backends}}
-        {{if ne $nonVirtualIP .Address}}{{.Address}}{{end}}
-        {{end}}
-    }
-    {{end}}
     authentication {
         auth_type PASS
-        auth_pass {{ .Cluster.Name }}_api_vip
+        auth_pass password
     }
     virtual_ipaddress {
-        {{ .Cluster.APIVIP }}/{{ .Cluster.VIPNetmask }}
+        {{ .Cluster.APIVIP }}
     }
     track_script {
         chk_ocp_lb
-        chk_ocp_both
     }
 }
 
 
 vrrp_instance {{ .Cluster.Name }}_API_EXTERNAL {
-    state SLAVE
+    state BACKUP
     interface ens4
     virtual_router_id 117
     priority 40
     advert_int 1
-    {{if .EnableUnicast}}
-    unicast_src_ip {{.NonVirtualIP}}
-    unicast_peer {
-        {{ .BootstrapIP }}
-        {{range .LBConfig.Backends}}
-        {{if ne $nonVirtualIP .Address}}{{.Address}}{{end}}
-        {{end}}
-    }
-    {{end}}
+    use_vmac
     authentication {
         auth_type PASS
-        auth_pass {{ .Cluster.Name }}_api_vip
+        auth_pass password
     }
     virtual_ipaddress {
-        172.21.112.25/32
+        172.21.112.25
     }
 }
 
-
 vrrp_instance {{ .Cluster.Name }}_INGRESS {
-    state SLAVE
-    interface {{ .VRRPInterface }}
+    state BACKUP
+    interface br-ex
     virtual_router_id {{ .Cluster.IngressVirtualRouterID }}
     priority 40
     advert_int 1
@@ -110,10 +102,10 @@ vrrp_instance {{ .Cluster.Name }}_INGRESS {
     {{end}}
     authentication {
         auth_type PASS
-        auth_pass {{ .Cluster.Name }}_ingress_vip
+        auth_pass password
     }
     virtual_ipaddress {
-        {{ .Cluster.IngressVIP }}/{{ .Cluster.VIPNetmask }}
+        {{ .Cluster.IngressVIP }}
     }
     track_script {
         chk_ingress

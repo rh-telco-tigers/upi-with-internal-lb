@@ -41,62 +41,43 @@ vrrp_script chk_ingress {
 {{$nonVirtualIP := .NonVirtualIP}}
 
 vrrp_instance {{ .Cluster.Name }}_API {
-    state SLAVE
-    interface {{ .VRRPInterface }}
+    state BACKUP
+    interface br-ex
     virtual_router_id {{ .Cluster.APIVirtualRouterID }}
     priority 40
     advert_int 1
-    {{if .EnableUnicast}}
-    unicast_src_ip {{.NonVirtualIP}}
-    unicast_peer {
-        {{ .BootstrapIP }}
-        {{range .LBConfig.Backends}}
-        {{if ne $nonVirtualIP .Address}}{{.Address}}{{end}}
-        {{end}}
-    }
-    {{end}}
     authentication {
         auth_type PASS
-        auth_pass {{ .Cluster.Name }}_api_vip
+        auth_pass password
     }
     virtual_ipaddress {
-        {{ .Cluster.APIVIP }}/{{ .Cluster.VIPNetmask }}
+        {{ .Cluster.APIVIP }}
     }
     track_script {
         chk_ocp_lb
-        chk_ocp_both
     }
 }
 
 
 vrrp_instance {{ .Cluster.Name }}_API_EXTERNAL {
-    state SLAVE
+    state BACKUP
     interface ens4
     virtual_router_id 117
     priority 40
     advert_int 1
-    {{if .EnableUnicast}}
-    unicast_src_ip {{.NonVirtualIP}}
-    unicast_peer {
-        {{ .BootstrapIP }}
-        {{range .LBConfig.Backends}}
-        {{if ne $nonVirtualIP .Address}}{{.Address}}{{end}}
-        {{end}}
-    }
-    {{end}}
+    use_vmac
     authentication {
         auth_type PASS
-        auth_pass {{ .Cluster.Name }}_api_vip
+        auth_pass password
     }
     virtual_ipaddress {
-        172.21.112.25/32
+        172.21.112.25
     }
 }
 
-
 vrrp_instance {{ .Cluster.Name }}_INGRESS {
-    state SLAVE
-    interface {{ .VRRPInterface }}
+    state BACKUP
+    interface br-ex
     virtual_router_id {{ .Cluster.IngressVirtualRouterID }}
     priority 40
     advert_int 1
@@ -110,10 +91,10 @@ vrrp_instance {{ .Cluster.Name }}_INGRESS {
     {{end}}
     authentication {
         auth_type PASS
-        auth_pass {{ .Cluster.Name }}_ingress_vip
+        auth_pass password
     }
     virtual_ipaddress {
-        {{ .Cluster.IngressVIP }}/{{ .Cluster.VIPNetmask }}
+        {{ .Cluster.IngressVIP }}
     }
     track_script {
         chk_ingress

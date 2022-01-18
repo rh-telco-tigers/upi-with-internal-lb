@@ -16,8 +16,6 @@ vrrp_script chk_ocp_lb {
     script "/usr/bin/timeout 1.9 /etc/keepalived/chk_ocp_script.sh"
     interval 2
     weight 20
-    rise 3
-    fall 2
 }
 
 vrrp_script chk_ocp_both {
@@ -26,8 +24,6 @@ vrrp_script chk_ocp_both {
     # Use a smaller weight for this check so it won't trigger the move from
     # bootstrap to master by itself.
     weight 5
-    rise 3
-    fall 2
 }
 
 # TODO: Improve this check. The port is assumed to be alive.
@@ -42,29 +38,19 @@ vrrp_script chk_ingress {
 
 vrrp_instance {{ .Cluster.Name }}_API {
     state MASTER
-    interface {{ .VRRPInterface }}
+    interface br-ex
     virtual_router_id {{ .Cluster.APIVirtualRouterID }}
     priority 45
     advert_int 1
-    {{if .EnableUnicast}}
-    unicast_src_ip {{.NonVirtualIP}}
-    unicast_peer {
-        {{ .BootstrapIP }}
-        {{range .LBConfig.Backends}}
-        {{if ne $nonVirtualIP .Address}}{{.Address}}{{end}}
-        {{end}}
-    }
-    {{end}}
     authentication {
         auth_type PASS
-        auth_pass {{ .Cluster.Name }}_api_vip
+        auth_pass password
     }
     virtual_ipaddress {
-        {{ .Cluster.APIVIP }}/{{ .Cluster.VIPNetmask }}
+        {{ .Cluster.APIVIP }}
     }
     track_script {
         chk_ocp_lb
-        chk_ocp_both
     }
 }
 
@@ -75,29 +61,21 @@ vrrp_instance {{ .Cluster.Name }}_API_EXTERNAL {
     virtual_router_id 117
     priority 45
     advert_int 1
-    {{if .EnableUnicast}}
-    unicast_src_ip {{.NonVirtualIP}}
-    unicast_peer {
-        {{ .BootstrapIP }}
-        {{range .LBConfig.Backends}}
-        {{if ne $nonVirtualIP .Address}}{{.Address}}{{end}}
-        {{end}}
-    }
-    {{end}}
+    use_vmac
     authentication {
         auth_type PASS
-        auth_pass {{ .Cluster.Name }}_api_vip
+        auth_pass password
     }
     virtual_ipaddress {
-        172.21.112.25/32
+        172.21.112.25
     }
 }
 
 vrrp_instance {{ .Cluster.Name }}_INGRESS {
-    state MASTER
-    interface {{ .VRRPInterface }}
+    state BACKUP
+    interface br-ex
     virtual_router_id {{ .Cluster.IngressVirtualRouterID }}
-    priority 45
+    priority 40
     advert_int 1
     {{if .EnableUnicast}}
     unicast_src_ip {{.NonVirtualIP}}
@@ -109,10 +87,10 @@ vrrp_instance {{ .Cluster.Name }}_INGRESS {
     {{end}}
     authentication {
         auth_type PASS
-        auth_pass {{ .Cluster.Name }}_ingress_vip
+        auth_pass password
     }
     virtual_ipaddress {
-        {{ .Cluster.IngressVIP }}/{{ .Cluster.VIPNetmask }}
+        {{ .Cluster.IngressVIP }}
     }
     track_script {
         chk_ingress
