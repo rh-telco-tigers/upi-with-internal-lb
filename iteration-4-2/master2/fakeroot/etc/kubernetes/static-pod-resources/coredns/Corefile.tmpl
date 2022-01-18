@@ -1,0 +1,43 @@
+. {
+    errors
+    bufsize 512
+    health :18080
+    forward . {{- range $upstream := .DNSUpstreams}} {{$upstream}}{{- end}} {
+        policy sequential
+    }
+    cache 30
+    reload
+    template IN {{ .Cluster.IngressVIPRecordType }} ocp300.nfvdev.tlabs.ca {
+        match .*.apps.ocp300.nfvdev.tlabs.ca
+        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.104.26"
+        fallthrough
+    }
+    template IN {{ .Cluster.IngressVIPEmptyType }} ocp300.nfvdev.tlabs.ca {
+        match .*.apps.ocp300.nfvdev.tlabs.ca
+        fallthrough
+    }
+    template IN {{ .Cluster.APIVIPRecordType }} ocp300.nfvdev.tlabs.ca {
+        match api.ocp300.nfvdev.tlabs.ca
+        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.104.25"
+        fallthrough
+    }
+    template IN {{ .Cluster.APIVIPEmptyType }} ocp300.nfvdev.tlabs.ca {
+        match api.ocp300.nfvdev.tlabs.ca
+        fallthrough
+    }
+    template IN {{ .Cluster.APIVIPRecordType }} ocp300.nfvdev.tlabs.ca {
+        match api-int.ocp300.nfvdev.tlabs.ca
+        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.104.25"
+        fallthrough
+    }
+    template IN {{ .Cluster.APIVIPEmptyType }} ocp300.nfvdev.tlabs.ca {
+        match api-int.ocp300.nfvdev.tlabs.ca
+        fallthrough
+    }
+    hosts {
+        {{- range .Cluster.NodeAddresses }}
+        {{ .Address }} {{ .Name }} {{ .Name }}.{{ $.Cluster.Name }}.{{ $.Cluster.Domain }}
+        {{- end }}
+        fallthrough
+    }
+}
