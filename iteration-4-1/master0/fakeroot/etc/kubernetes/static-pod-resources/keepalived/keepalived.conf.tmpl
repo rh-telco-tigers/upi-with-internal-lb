@@ -54,7 +54,7 @@ vrrp_script chk_default_ingress {
 
 vrrp_instance {{ .Cluster.Name }}_API {
     state BACKUP
-    interface br-ex
+    interface ens3
     virtual_router_id 116
     priority 40
     advert_int 1
@@ -84,7 +84,7 @@ vrrp_instance {{ .Cluster.Name }}_API {
 
 vrrp_instance {{ .Cluster.Name }}_INGRESS {
     state BACKUP
-    interface br-ex
+    interface ens3
     virtual_router_id 117
     priority 20
     advert_int 1
