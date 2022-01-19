@@ -31,7 +31,7 @@ spec:
       path: "/"
   initContainers:
   - name: render-config-keepalived
-    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:c1f0f7c54f0f2ecd38fdf2667651f95153a589bd7fe4605f0f96a97899576a08
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:2ce9667775acdefcff0a90199c2b87b001b98d7ea5b5e7ed18453ba47b318235
     command:
     - runtimecfg
     - render
@@ -56,7 +56,7 @@ spec:
   - name: keepalived
     securityContext:
       privileged: true
-    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:8c872154e89c7c361c882bcd6acff3ff97464e7f1a0311c631e9a939085e9934
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:be638091383eadef518fcdad50493bfde851f8010d6d2c57e0f9cecc0f70f48e
     env:
       - name: NSS_SDB_USE_CACHE
         value: "no"
@@ -65,6 +65,13 @@ spec:
     - -c
     - |
       #/bin/bash
+      sigterm_handler()
+      {
+        if pid=$(pgrep -o keepalived); then
+          kill -s SIGTERM "$pid"
+        fi
+      }
+
       reload_keepalived()
       {
         if pid=$(pgrep -o keepalived); then
@@ -85,10 +92,28 @@ spec:
         done
       }
 
+      remove_vip()
+      {
+        address=$1
+        interface=$(ip -o a | awk "/\s${address}\// {print \$2}")
+        cidr=$(ip -o a | awk "/\s${address}\// {print \$4}")
+        if [ -n "$interface" ]; then
+            ip a del $cidr dev $interface
+        fi
+      }
+
       set -ex
+      # Ensure that we don't have stale VIPs configured
+      # See https://bugzilla.redhat.com/show_bug.cgi?id=1931505
+      remove_vip "172.21.104.25"
+      remove_vip "172.21.104.26"
+      remove_vip "172.21.112.25"
       declare -r keepalived_sock="/var/run/keepalived/keepalived.sock"
       export -f msg_handler
       export -f reload_keepalived
+      export -f sigterm_handler
+
+      trap sigterm_handler SIGTERM
       if [ -s "/etc/keepalived/keepalived.conf" ]; then
           /usr/sbin/keepalived -f /etc/keepalived/keepalived.conf --dont-fork --vrrp --log-detail --log-console &
       fi
@@ -104,20 +129,25 @@ spec:
       mountPath: "/etc/keepalived"
     - name: run-dir
       mountPath: "/var/run/keepalived"
+    - name: chroot-host
+      mountPath: "/host"
+    - name: kubeconfigvarlib
+      mountPath: "/var/lib/kubelet"
     livenessProbe:
       exec:
         command:
         - /bin/bash
         - -c
         - |
-          kill -s SIGUSR1 "$(pgrep -o keepalived)" && ! grep -q "State = FAULT" /tmp/keepalived.data
+          [ ! -s "/etc/keepalived/keepalived.conf" ] || (echo "State = FAULT" > /tmp/keepalived.data && kill -s SIGUSR1 "$(pgrep -o keepalived)" && for i in $(seq 5); do grep -q "State = FAULT" /tmp/keepalived.data && sleep 1 || exit 0; done && exit 1)
       initialDelaySeconds: 20
+      timeoutSeconds: 5
     terminationMessagePolicy: FallbackToLogsOnError
     imagePullPolicy: IfNotPresent
   - name: keepalived-monitor
     securityContext:
       privileged: true
-    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:c1f0f7c54f0f2ecd38fdf2667651f95153a589bd7fe4605f0f96a97899576a08
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:2ce9667775acdefcff0a90199c2b87b001b98d7ea5b5e7ed18453ba47b318235
     env:
       - name: ENABLE_UNICAST
         value: "no"
