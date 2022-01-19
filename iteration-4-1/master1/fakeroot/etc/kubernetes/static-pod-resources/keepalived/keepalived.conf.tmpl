@@ -54,8 +54,8 @@ vrrp_script chk_default_ingress {
 
 vrrp_instance {{ .Cluster.Name }}_API {
     state BACKUP
-    interface {{ .VRRPInterface }}
-    virtual_router_id {{ .Cluster.APIVirtualRouterID }}
+    interface br-ex
+    virtual_router_id 116
     priority 40
     advert_int 1
     use_vmac
@@ -71,7 +71,7 @@ vrrp_instance {{ .Cluster.Name }}_API {
     {{end}}
     authentication {
         auth_type PASS
-        auth_pass {{ .Cluster.Name }}_api_vip
+        auth_pass password
     }
     virtual_ipaddress {
         {{ .Cluster.APIVIP }}/{{ .Cluster.VIPNetmask }}
@@ -84,8 +84,8 @@ vrrp_instance {{ .Cluster.Name }}_API {
 
 vrrp_instance {{ .Cluster.Name }}_INGRESS {
     state BACKUP
-    interface {{ .VRRPInterface }}
-    virtual_router_id {{ .Cluster.IngressVirtualRouterID }}
+    interface br-ex
+    virtual_router_id 117
     priority 20
     advert_int 1
     use_vmac
@@ -101,7 +101,7 @@ vrrp_instance {{ .Cluster.Name }}_INGRESS {
     {{end}}
     authentication {
         auth_type PASS
-        auth_pass {{ .Cluster.Name }}_ingress_vip
+        auth_pass password
     }
     virtual_ipaddress {
         {{ .Cluster.IngressVIP }}/{{ .Cluster.VIPNetmask }}
@@ -116,7 +116,7 @@ vrrp_instance {{ .Cluster.Name }}_INGRESS {
 vrrp_instance {{ .Cluster.Name }}_API_EXTERNAL {
     state BACKUP
     interface ens4
-    virtual_router_id 117
+    virtual_router_id 118
     priority 40
     advert_int 1
     use_vmac
@@ -131,7 +131,7 @@ vrrp_instance {{ .Cluster.Name }}_API_EXTERNAL {
     {{end}}
     authentication {
         auth_type PASS
-        auth_pass {{ .Cluster.Name }}_api_vip
+        auth_pass password
     }
     virtual_ipaddress {
         172.21.112.25/32

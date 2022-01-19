@@ -7,7 +7,7 @@
 vrrp_instance {{.Cluster.Name}}_API {
     state BACKUP
     interface {{.VRRPInterface}}
-    virtual_router_id {{.Cluster.APIVirtualRouterID }}
+    virtual_router_id 116
     priority 70
     advert_int 1
     {{ if .EnableUnicast }}
@@ -20,7 +20,7 @@ vrrp_instance {{.Cluster.Name}}_API {
     {{end}}
     authentication {
         auth_type PASS
-        auth_pass {{.Cluster.Name}}_api_vip
+        auth_pass password
     }
     virtual_ipaddress {
         {{ .Cluster.APIVIP }}/{{ .Cluster.VIPNetmask }}
