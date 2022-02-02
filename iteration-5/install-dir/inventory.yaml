@@ -58,5 +58,5 @@ all:
       ocp30_outbound_subnet_range: 172.21.105.192/26
       ocp30_public_subnet_range: 172.21.112.0/27
       ocp30_management_subnet_range: 172.21.104.64/26
-      dns_nameserver:
+      dns_nameservers:
         domain: nfvdev.tlabs.ca
