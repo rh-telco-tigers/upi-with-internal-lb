@@ -1,0 +1,42 @@
+- import_playbook: common.yaml
+
+- hosts: all
+  gather_facts: no
+
+  tasks:
+
+    - name: Run openshift-install steps for a fresh install
+      block:
+        - name: Ensure {{ cluster_domain }} dir exists
+          file:
+            path: "../scripts/{{ cluster_domain }}"
+            state: directory
+
+        - name: Generate install-config.yaml
+          template:
+            src: install-config.yaml.j2
+            dest: "../scripts/{{ cluster_domain }}/install-config.yaml"
+            lstrip_blocks: true
+          vars:
+            connected_cluster: "{{ connected_install | default(True) }}"
+            cso_chain: "{{ lookup('env', 'TCSO_CHAIN') }}"
+
+
+        - name: Backup install-config.yaml
+          copy:
+            src: "../scripts/{{ cluster_domain }}/install-config.yaml"
+            dest: "../scripts/install-config.yaml.bkp"
+
+        - name: Generate clouds.yaml
+          template:
+            src: clouds.yaml.j2
+            dest: "../scripts/{{ cluster_domain }}/clouds.yaml"
+
+        - name: Generate manifests
+          command: openshift-install create manifests --dir=../scripts/{{ cluster_domain }}
+
+        - name: Set master nodes to be not schedulable
+          lineinfile:
+            path: "../scripts/{{ cluster_domain }}/manifests/cluster-scheduler-02-config.yml"
+            regexp: "^  mastersSchedulable"
+            line: "  mastersSchedulable: false"
