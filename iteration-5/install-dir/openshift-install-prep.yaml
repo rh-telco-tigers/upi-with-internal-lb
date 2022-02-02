@@ -14,11 +14,6 @@
           template:
             src: install-config.yaml.j2
             dest: "../scripts/{{ cluster_domain }}/install-config.yaml"
-            lstrip_blocks: true
-          vars:
-            connected_cluster: "{{ connected_install | default(True) }}"
-            cso_chain: "{{ lookup('env', 'TCSO_CHAIN') }}"
-
 
         - name: Backup install-config.yaml
           copy:
