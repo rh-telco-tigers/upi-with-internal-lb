@@ -6,6 +6,7 @@ all:
 
       cluster_name: 'ocp400'
       rh_pull_secret: place_holder
+      cluster_domain: 'nfvdev.tlabs.ca'
 
       # User-provided values
       os_subnet_range: '172.21.104.0/26'
