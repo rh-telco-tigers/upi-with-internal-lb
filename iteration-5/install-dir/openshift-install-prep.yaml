@@ -25,16 +25,5 @@
             src: "../scripts/{{ cluster_domain }}/install-config.yaml"
             dest: "../scripts/install-config.yaml.bkp"
 
-        - name: Generate clouds.yaml
-          template:
-            src: clouds.yaml.j2
-            dest: "../scripts/{{ cluster_domain }}/clouds.yaml"
-
         - name: Generate manifests
           command: openshift-install create manifests --dir=../scripts/{{ cluster_domain }}
-
-        - name: Set master nodes to be not schedulable
-          lineinfile:
-            path: "../scripts/{{ cluster_domain }}/manifests/cluster-scheduler-02-config.yml"
-            regexp: "^  mastersSchedulable"
-            line: "  mastersSchedulable: false"
