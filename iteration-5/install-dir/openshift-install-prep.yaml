@@ -1,5 +1,3 @@
-- import_playbook: common.yaml
-
 - hosts: all
   gather_facts: no
 
