@@ -4,6 +4,9 @@ all:
       ansible_connection: local
       ansible_python_interpreter: "{{ansible_playbook_python}}"
 
+      cluster_name: 'ocp400'
+      rh_pull_secret: place_holder
+
       # User-provided values
       os_subnet_range: '172.21.104.0/26'
       os_flavor_master: '6-12G-120'
@@ -54,3 +57,5 @@ all:
       ocp30_outbound_subnet_range: 172.21.105.192/26
       ocp30_public_subnet_range: 172.21.112.0/27
       ocp30_management_subnet_range: 172.21.104.64/26
+      dns_nameserver:
+        domain: nfvdev.tlabs.ca
