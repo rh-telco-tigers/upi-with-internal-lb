@@ -50,7 +50,7 @@
 
     - name: merge bootstrap ignition
       set_fact:
-        merged_bootstrap_ignition: "{{ bootstrap_ignition | combine (bootstrap_light_ignition, recursive=True) }}"
+        merged_bootstrap_ignition: "{{ bootstrap_light_ignition | combine (bootstrap_ignition, recursive=True) }}"
 
 
     - name: print final result
