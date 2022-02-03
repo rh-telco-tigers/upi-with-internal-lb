@@ -35,6 +35,14 @@
         src: templates/bootstrap-light-ignition.ign.j2
         dest: "../scripts/{{ cluster_domain }}/bootstrap-light-ignition.ign"
 
+    - name: Load bootstrap iginition
+      set_fact:
+        bootstrap_ignition: "{{ lookup('file','../scripts/{{ cluster_domain }}/bootstrap.ign') | from_json }}"
+
+    - name: Load bootstrap iginition
+      set_fact:
+        bootstrap_light_ignition: "{{ lookup('file','../scripts/{{ cluster_domain }}/bootstrap-light-ignition.ign') | from_json }}"
+
     - name: Create interfaces Dictionary
       set_fact:
         bootstrap_ignition_files: "{{ bootstrap_ignition.storage.files }}"
