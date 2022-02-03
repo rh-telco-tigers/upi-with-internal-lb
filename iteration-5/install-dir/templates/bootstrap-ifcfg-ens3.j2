@@ -11,3 +11,18 @@ DOMAIN=localdomain
 DNS1=127.0.0.1
 DNS2=205.206.214.249
 DNS3=209.20.8.249
+
+BOOTPROTO=none
+DEFROUTE=no
+NAME=ens3
+DEVICE=ens3
+ONBOOT=yes
+IPADDR={{ ip_cluster.ip_cluster }}
+PREFIX={{ networks.cluster.ocp_core.cidr | ipaddr('prefix') }}
+MTU={{ networks.cluster.mtu }}
+GATEWAY={{ networks.cluster.ocp_core.gateway }}
+DOMAIN=localdomain
+DNS1=127.0.0.1
+{% for d in dns_nameservers.nameservers %}
+DNS{{ loop.index + 1 }}={{ d }}
+{% endfor %}

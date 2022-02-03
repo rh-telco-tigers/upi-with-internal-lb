@@ -16,7 +16,7 @@ all:
 
       bootstrap:
         name: "bootstrap"
-        ip_cluster: "172.21.104.6"
+        ip_cluster: "172.21.104.20"
         ip_mgmt: "172.21.104.70"
 
       masters:
