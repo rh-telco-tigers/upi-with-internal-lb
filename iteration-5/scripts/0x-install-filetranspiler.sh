@@ -1,2 +1,0 @@
-curl -LO https://download.copr.fedorainfracloud.org/results/eminguez/eminguez-RPMs/fedora-33-x86_64/01784152-filetranspiler/filetranspiler-1.1.0-1.fc33.x86_64.rpm
-sudo rpm -ivh filetranspiler-1.1.0-1.fc33.x86_64.rpm 

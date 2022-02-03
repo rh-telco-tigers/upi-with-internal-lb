@@ -1,40 +1,37 @@
 - hosts: localhost
   gather_facts: no
 
-  vars_files:
-  - metadata.json
-
   tasks:
   - name: 'Compute resource names'
     set_fact:
-      cluster_id_tag: "openshiftClusterID={{ infraID }}"
-      primary_cluster_network_tag: "{{ infraID }}-primaryClusterNetwork"
-      os_infra_id: "{{ infraID }}"
+      cluster_id_tag: "openshiftClusterID={{ cluster_name }}"
+      primary_cluster_network_tag: "{{ cluster_name }}-primaryClusterNetwork"
+      os_infra_id: "{{ cluster_name }}"
       os_network: "ocp30_cluster"
       os_subnet: "ocp30_cluster"
-      os_router: "{{ infraID }}-external-router"
+      os_router: "{{ cluster_name }}-external-router"
       # Port names
-      os_port_api: "{{ infraID }}-api-port"
-      os_port_ingress: "{{ infraID }}-ingress-port"
-      os_port_bootstrap: "{{ infraID }}-bootstrap-port"
-      os_port_master: "{{ infraID }}-master-port"
-      os_port_worker: "{{ infraID }}-worker-port"
+      os_port_api: "{{ cluster_name }}-api-port"
+      os_port_ingress: "{{ cluster_name }}-ingress-port"
+      os_port_bootstrap: "{{ cluster_name }}-bootstrap-port"
+      os_port_master: "{{ cluster_name }}-master-port"
+      os_port_worker: "{{ cluster_name }}-worker-port"
       # Security groups names
-      os_sg_master: "{{ infraID }}-master"
-      os_sg_worker: "{{ infraID }}-worker"
+      os_sg_master: "{{ cluster_name }}-master"
+      os_sg_worker: "{{ cluster_name }}-worker"
       # Server names
-      os_bootstrap_server_name: "{{ infraID }}-bootstrap"
-      os_cp_server_name: "{{ infraID }}-master"
-      os_cp_server_group_name: "{{ infraID }}-master"
-      os_compute_server_name: "{{ infraID }}-worker"
+      os_bootstrap_server_name: "{{ cluster_name }}-bootstrap"
+      os_cp_server_name: "{{ cluster_name }}-master"
+      os_cp_server_group_name: "{{ cluster_name }}-master"
+      os_compute_server_name: "{{ cluster_name }}-worker"
       # Trunk names
-      os_cp_trunk_name: "{{ infraID }}-master-trunk"
-      os_compute_trunk_name: "{{ infraID }}-worker-trunk"
+      os_cp_trunk_name: "{{ cluster_name }}-master-trunk"
+      os_compute_trunk_name: "{{ cluster_name }}-worker-trunk"
       # Subnet pool name
-      subnet_pool: "{{ infraID }}-kuryr-pod-subnetpool"
+      subnet_pool: "{{ cluster_name }}-kuryr-pod-subnetpool"
       # Service network name
-      os_svc_network: "{{ infraID }}-kuryr-service-network"
+      os_svc_network: "{{ cluster_name }}-kuryr-service-network"
       # Service subnet name
-      os_svc_subnet: "{{ infraID }}-kuryr-service-subnet"
+      os_svc_subnet: "{{ cluster_name }}-kuryr-service-subnet"
       # Ignition files
-      os_bootstrap_ignition: "{{ infraID }}-bootstrap-ignition.json"
+      os_bootstrap_ignition: "{{ cluster_name }}-bootstrap-ignition.json"
