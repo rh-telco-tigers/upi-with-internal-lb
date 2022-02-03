@@ -11,7 +11,7 @@
     cache 30
     reload
     hosts /etc/coredns/api-int.hosts {% endraw %} {{ cluster_name }}.{{ cluster_domain }} {
-        {% raw %} {{ keepalived.api }} {% endraw %} api-int.{{ cluster_name }}.{{ cluster_domain }} api.{{ cluster_name }}.{{ cluster_domain }}
+        {{ keepalived.api }} api-int.{{ cluster_name }}.{{ cluster_domain }} api.{{ cluster_name }}.{{ cluster_domain }}
         fallthrough
     }
 }
