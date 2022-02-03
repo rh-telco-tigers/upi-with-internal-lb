@@ -7,9 +7,9 @@ export SWIFT_URL_TEMP=$(openstack endpoint list -f json | jq -r '.[] | select((.
 export SWIFT_URL=$(echo $SWIFT_URL_TEMP | sed -r "s/AUTH_\%\(tenant_id\)s/$CONTAINER_TENANT_ID/g")
 export TOKEN=$(openstack token issue -c id -f value)
 
-openstack object create --name $INFRA_ID-bootstrap.ign $CONTAINER_NAME scripts/${CONTAINER_NAME}.${DOMAIN_NAME}/custom-bootstrap.ign
+openstack object create --name $INFRA_ID-bootstrap.ign $CONTAINER_NAME scripts/${INFRA_ID}.${DOMAIN_NAME}/custom-bootstrap.ign
 
-cat <<EOF > scripts/${CONTAINER_NAME}.${DOMAIN_NAME}/$INFRA_ID-bootstrap-ignition.json
+cat <<EOF > scripts/${INFRA_ID}.${DOMAIN_NAME}/$INFRA_ID-bootstrap-ignition.json
 {
   "ignition": {
     "config": {
