@@ -10,8 +10,11 @@
     }
     cache 30
     reload
-    template IN {{ .Cluster.IngressVIPRecordType }} ocp300.nfvdev.tlabs.ca {
+{% endraw %}
+{% raw %}
+    template IN {{ .Cluster.IngressVIPRecordType }} {% endraw %} ocp300.nfvdev.tlabs.ca {
         match .*.apps.ocp300.nfvdev.tlabs.ca
+{% raw %}
         answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.104.26"
         fallthrough
     }
