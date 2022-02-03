@@ -1,4 +1,4 @@
 {% raw %}
 #!/bin/bash
-{% endraw %}
 /host/bin/oc --kubeconfig /var/lib/kubelet/kubeconfig get ep -n openshift-ingress router-internal-default -o yaml | grep 'ip:' | grep -q {{.NonVirtualIP}}
+{% endraw %}

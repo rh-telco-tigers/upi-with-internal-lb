@@ -1,4 +1,4 @@
 {% raw %}
 #!/bin/bash
-{% endraw %}
 /usr/bin/curl -o /dev/null -kLfs https://localhost:{{ .LBConfig.LbPort }}/readyz && [ -e /var/run/keepalived/iptables-rule-exists ]
+{% endraw %}
