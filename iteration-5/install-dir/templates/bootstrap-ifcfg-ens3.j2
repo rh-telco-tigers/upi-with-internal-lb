@@ -1,23 +1,9 @@
 BOOTPROTO=none
-DEFROUTE=yes
-NAME=ens3
-DEVICE=ens3
-ONBOOT=yes
-IPADDR=172.21.104.20
-PREFIX=26
-MTU=2150
-GATEWAY=172.21.104.1
-DOMAIN=localdomain
-DNS1=127.0.0.1
-DNS2=205.206.214.249
-DNS3=209.20.8.249
-
-BOOTPROTO=none
 DEFROUTE=no
 NAME=ens3
 DEVICE=ens3
 ONBOOT=yes
-IPADDR={{ ip_cluster.ip_cluster }}
+IPADDR={{ bootstrap.ip_cluster }}
 PREFIX={{ networks.cluster.ocp_core.cidr | ipaddr('prefix') }}
 MTU={{ networks.cluster.mtu }}
 GATEWAY={{ networks.cluster.ocp_core.gateway }}
