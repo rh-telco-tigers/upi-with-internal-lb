@@ -24,24 +24,28 @@
         fallthrough
     }
 {% raw %}
-    template IN {{ .Cluster.APIVIPRecordType }} ocp300.nfvdev.tlabs.ca {
-        match api.ocp300.nfvdev.tlabs.ca
+    template IN {{ .Cluster.APIVIPRecordType }} {% endraw %} {{ cluster_name }}.{{ cluster_domain }} {
+        match api.{{ cluster_name }}.{{ cluster_domain }}
         answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.104.25"
         fallthrough
     }
-    template IN {{ .Cluster.APIVIPEmptyType }} ocp300.nfvdev.tlabs.ca {
-        match api.ocp300.nfvdev.tlabs.ca
+{% raw %}
+    template IN {{ .Cluster.APIVIPEmptyType }} {% endraw %} {{ cluster_name }}.{{ cluster_domain }} {
+        match api.{{ cluster_name }}.{{ cluster_domain }}
         fallthrough
     }
-    template IN {{ .Cluster.APIVIPRecordType }} ocp300.nfvdev.tlabs.ca {
-        match api-int.ocp300.nfvdev.tlabs.ca
+{% raw %}
+    template IN {{ .Cluster.APIVIPRecordType }} {% endraw %} {{ cluster_name }}.{{ cluster_domain }} {
+        match api-int.{{ cluster_name }}.{{ cluster_domain }}
         answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.104.25"
         fallthrough
     }
-    template IN {{ .Cluster.APIVIPEmptyType }} ocp300.nfvdev.tlabs.ca {
-        match api-int.ocp300.nfvdev.tlabs.ca
+{% raw %}
+    template IN {{ .Cluster.APIVIPEmptyType }} {% endraw %} {{ cluster_name }}.{{ cluster_domain }} {
+        match api-int.{{ cluster_name }}.{{ cluster_domain }}
         fallthrough
     }
+{% raw %}
     hosts {
         {{- range .Cluster.NodeAddresses }}
         {{ .Address }} {{ .Name }} {{ .Name }}.{{ $.Cluster.Name }}.{{ $.Cluster.Domain }}
