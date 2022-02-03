@@ -23,3 +23,12 @@
         ip_outbound: "{{ node['ip_outbound'] }}"
         ip_public: "{{ node['ip_public'] }}"
         fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
+
+    - name: Initiate bootsrap configs
+      set_fact:
+        files: []
+  
+    - name: generate bootsrap ignition files
+      template:
+        src: templates/bootstrap-light-ignition.ign.j2
+        dest: "../scripts/{{ cluster_domain }}/bootstrap-light-ignition.ign"
