@@ -1,4 +1,4 @@
-export INFRA_ID=$(jq -r .infraID install-dir/metadata.json)
+export INFRA_ID=$(yq -r .all.hosts.localhost.cluster_name install-dir/inventory.yaml)
 export CONTAINER_NAME="ocp30-ignition"
 export CERTIFICATE=$(cat ~/.openstack/nfvi.crt | base64 )
 export CONTAINER_TENANT_ID=$(openstack container show $CONTAINER_NAME -f json | jq -r .account)

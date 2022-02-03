@@ -1,4 +1,4 @@
-export INFRA_ID=$(jq -r .infraID install-dir/metadata.json)
+export INFRA_ID=$(yq -r .all.hosts.localhost.cluster_name install-dir/inventory.yaml)
 
 cd install-dir
 ansible-playbook -i inventory.yaml security-groups.yaml

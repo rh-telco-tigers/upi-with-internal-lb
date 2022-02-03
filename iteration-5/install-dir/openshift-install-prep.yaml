@@ -1,7 +1,7 @@
 - hosts: all
   gather_facts: no
   vars:
-    master_ignition_file: "../scripts/{{ cluster_domain }}/master.ign"
+    master_ignition_file: "../scripts/{{ cluster_name }}.{{ cluster_domain }}/master.ign"
     master_ignition_content: "{{ lookup('file', master_ignition_file) }}"
     certificate_bundle_line: "{{ master_ignition_content | json_query('ignition.security.tls.certificateAuthorities[0].source') }}"
 
@@ -9,23 +9,18 @@
 
     - name: Run openshift-install steps for a fresh install
       block:
-        - name: Ensure {{ cluster_domain }} dir exists
+        - name: Ensure {{ cluster_name }}.{{ cluster_domain }} dir exists
           file:
-            path: "../scripts/{{ cluster_domain }}"
+            path: "../scripts/{{ cluster_name }}.{{ cluster_domain }}"
             state: directory
 
         - name: Generate install-config.yaml
           template:
             src: install-config.yaml.j2
-            dest: "../scripts/{{ cluster_domain }}/install-config.yaml"
-
-        - name: Backup install-config.yaml
-          copy:
-            src: "../scripts/{{ cluster_domain }}/install-config.yaml"
-            dest: "../scripts/install-config.yaml.bkp"
+            dest: "../scripts/{{ cluster_name }}.{{ cluster_domain }}/install-config.yaml"
 
         - name: Generate manifests
-          command: openshift-install create manifests --dir=../scripts/{{ cluster_domain }}
+          command: openshift-install create manifests --dir=../scripts/{{ cluster_name }}.{{ cluster_domain }}
 
         - name: Create ignition configs
-          command: openshift-install create ignition-configs --dir=../scripts/{{ cluster_domain }}
+          command: openshift-install create ignition-configs --dir=../scripts/{{ cluster_name }}.{{ cluster_domain }}

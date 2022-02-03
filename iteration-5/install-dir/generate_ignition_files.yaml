@@ -2,7 +2,7 @@
 - hosts: localhost
   gather_facts: no
   vars:
-    master_ignition_file: "../scripts/{{ cluster_domain }}/master.ign"
+    master_ignition_file: "../scripts/{{ cluster_name }}.{{ cluster_domain }}/master.ign"
     master_ignition_content: "{{ lookup('file', master_ignition_file) }}"
     certificate_bundle_line: "{{ master_ignition_content | json_query('ignition.security.tls.certificateAuthorities[0].source') }}"
 
@@ -10,15 +10,15 @@
     - name: generate light bootstrap ignition files
       template:
         src: templates/bootstrap-light-ignition.ign.j2
-        dest: "../scripts/{{ cluster_domain }}/bootstrap-light-ignition.ign"
+        dest: "../scripts/{{ cluster_name }}.{{ cluster_domain }}/bootstrap-light-ignition.ign"
 
     - name: Load bootstrap iginition
       set_fact:
-        bootstrap_ignition: "{{ lookup('file','../scripts/{{ cluster_domain }}/bootstrap.ign') | from_json }}"
+        bootstrap_ignition: "{{ lookup('file','../scripts/{{ cluster_name }}.{{ cluster_domain }}/bootstrap.ign') | from_json }}"
 
     - name: Load light bootstrap ignition
       set_fact:
-        bootstrap_light_ignition: "{{ lookup('file','../scripts/{{ cluster_domain }}/bootstrap-light-ignition.ign') | from_json }}"
+        bootstrap_light_ignition: "{{ lookup('file','../scripts/{{ cluster_name }}.{{ cluster_domain }}/bootstrap-light-ignition.ign') | from_json }}"
 
     - name: merge bootstrap ignition files object
       set_fact:
@@ -27,12 +27,12 @@
     - name: generate final bootstrap ignition files
       template:
         src: templates/bootstrap-final-ignition.ign.j2
-        dest: "../scripts/{{ cluster_domain }}/final-bootstrap.ign"
+        dest: "../scripts/{{ cluster_name }}.{{ cluster_domain }}/final-bootstrap.ign"
 
     - name: generate master ignition files
       template:
         src: templates/master-ignition.ign.j2
-        dest: "../scripts/{{ cluster_domain }}/{{ hostname }}.ign"
+        dest: "../scripts/{{ cluster_name }}.{{ cluster_domain }}/{{ hostname }}.ign"
       loop: "{{ masters }}"
       loop_control:
         loop_var: node
