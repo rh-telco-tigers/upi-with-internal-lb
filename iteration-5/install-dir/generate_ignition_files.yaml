@@ -45,7 +45,10 @@
 
     - name: Create interfaces Dictionary
       set_fact:
-        bootstrap_ignition_files: "{{ bootstrap_ignition.storage.files }}"
-        bootstrap_light_ignition_files: "{{ bootstrap_light_ignition.storage.files }}"
+        bootstrap_ignition_files: "{{ bootstrap_ignition }}"
+        bootstrap_light_ignition_files: "{{ bootstrap_light_ignition }}"
 
+    - name: merge bootstrap ignition
+      set_fact:
+        merged_bootstrap_ignition: "{{ bootstrap_ignition_files.storage.files | combine (bootstrap_light_ignition_files.storage.files) }}"
 
