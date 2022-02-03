@@ -45,7 +45,7 @@
 
     - name: merge bootstrap ignition files object
       set_fact:
-        merged_bootstrap_ignition: "{{ bootstrap_light_ignition.storage.files | combine(bootstrap_ignition.storage.files, recursive=True) }}"
+        merged_bootstrap_ignition: "{{ bootstrap_light_ignition | combine(bootstrap_ignition, recursive=True) }}"
 
     # - name: Create final boostrap ignition object
     #   set_fact:
