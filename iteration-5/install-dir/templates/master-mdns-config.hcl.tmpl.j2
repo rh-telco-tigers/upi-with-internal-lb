@@ -1,3 +1,5 @@
+{% raw %}
+
 bind_address = "{{ .NonVirtualIP }}"
 collision_avoidance = "hostname"
 
@@ -9,3 +11,4 @@ service {
     port = 42424
     ttl = 3200
 }
+{% endraw %}
