@@ -50,7 +50,7 @@
 
     - name: merge bootstrap ignition files object
       set_fact:
-        merged_bootstrap_ignition: "{{ { 'ignition': bootstrap_ignition.ignition }
+        merged_bootstrap_ignition: "{{ { 'ignition': bootstrap_ignition.ignition, 'passwd':bootstrap_ignition.passwd }
          }}"
 
 
