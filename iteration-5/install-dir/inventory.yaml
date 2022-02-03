@@ -16,15 +16,15 @@ all:
 
       masters:
       - name: "m01"
-        ip_cluster: "172.21.104.7"
+        ip_cluster: "172.21.104.21"
         ip_mgmt: "172.21.104.71"
         ip_outbound: "172.21.105.195"
       - name: "m02"
-        ip_cluster: "172.21.104.8"
+        ip_cluster: "172.21.104.22"
         ip_mgmt: "172.21.104.72"
         ip_outbound: "172.21.105.196"
       - name: "m03"
-        ip_cluster: "172.21.104.9"
+        ip_cluster: "172.21.104.23"
         ip_mgmt: "172.21.104.73"
         ip_outbound: "172.21.105.197"
 

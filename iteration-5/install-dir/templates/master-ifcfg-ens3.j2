@@ -21,7 +21,7 @@ IPADDR={{ ip_cluster }}
 PREFIX={{ networks.cluster.ocp_core.cidr | ipaddr('prefix') }}
 MTU={{ networks.cluster.mtu }}
 GATEWAY={{ networks.cluster.ocp_core.gateway }}
-DOMAIN=ocp300.nfvdev.tlabs.ca
+DOMAIN={{ cluster_name }}.{{ cluster_domain }}
 DNS1={{ ip_cluster }}
 {% for d in dns_nameservers.nameservers %}
 DNS{{ loop.index + 1 }}={{ d }}
