@@ -31,35 +31,36 @@ all:
         management:
           mtu: 1500
           ocp_core:
-            name: "{{ project.name }}_management"
+            name: "management"
             cidr: 172.21.104.64/26
             gateway: 172.21.104.65
             external: no
-            rt: "{{so_config.tenant_rt}}"
         cluster:
           mtu: 2150
           ocp_core:
-            name: "{{ project.name }}_cluster"
+            name: "cluster"
             cidr: 172.21.104.0/26
             gateway: 172.21.104.1
             external: no
-            rt: "{{so_config.tenant_rt}}"
         outbound:
           mtu: 1500
           ocp_core:
-            name: "{{ project.name }}_outbound"
+            name: "outbound"
             cidr: 172.21.105.192/26
             gateway: 172.21.105.193
             external: no
-            rt: "{{so_config.tenant_rt}}"
         public:
           ocp_core:
-            name: "{{ project.name }}_public"
+            name: "public"
             cidr: 172.21.112.0/27
             gateway: 172.21.112.1
             external: no
-            rt: "{{so_config.tenant_rt}}"
-      
+
+        dns_nameservers:
+          nameservers:
+            - 205.206.214.249
+            - 209.20.8.249
+
       # User-provided values
       os_subnet_range: '172.21.104.0/26'
       os_flavor_master: '6-12G-120'
