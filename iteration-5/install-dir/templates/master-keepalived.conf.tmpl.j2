@@ -1,3 +1,5 @@
+{% raw %}
+
 global_defs {
     enable_script_security
     script_user root
@@ -84,3 +86,4 @@ vrrp_instance {{ .Cluster.Name }}_API_EXTERNAL {
         172.21.112.25/32
     }
 }
+{% endraw %}
