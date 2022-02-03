@@ -27,6 +27,39 @@ all:
         ip_mgmt: "172.21.104.73"
         ip_outbound: "172.21.105.197"
 
+      networks:
+        management:
+          mtu: 1500
+          ocp_core:
+            name: "{{ project.name }}_management"
+            cidr: 172.21.104.64/26
+            gateway: 172.21.104.65
+            external: no
+            rt: "{{so_config.tenant_rt}}"
+        cluster:
+          mtu: 2150
+          ocp_core:
+            name: "{{ project.name }}_cluster"
+            cidr: 172.21.104.0/26
+            gateway: 172.21.104.1
+            external: no
+            rt: "{{so_config.tenant_rt}}"
+        outbound:
+          mtu: 1500
+          ocp_core:
+            name: "{{ project.name }}_outbound"
+            cidr: 172.21.105.192/26
+            gateway: 172.21.105.193
+            external: no
+            rt: "{{so_config.tenant_rt}}"
+        public:
+          ocp_core:
+            name: "{{ project.name }}_public"
+            cidr: 172.21.112.0/27
+            gateway: 172.21.112.1
+            external: no
+            rt: "{{so_config.tenant_rt}}"
+      
       # User-provided values
       os_subnet_range: '172.21.104.0/26'
       os_flavor_master: '6-12G-120'
