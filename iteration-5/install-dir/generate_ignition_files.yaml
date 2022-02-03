@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars:
+    master_ignition_file: "../scripts/{{ cluster_domain }}/master.ign"
+    master_ignition_content: "{{ lookup('file', master_ignition_file) }}"
+    certificate_bundle_line: "{{ master_ignition_content | json_query('ignition.security.tls.certificateAuthorities[0].source') }}"
+
+  tasks:
+    - name: generate master ignition files
+      template:
+        src: templates/master-ignition.ign.j2
+        dest: "{{ ignition_dir }}/{{ hostname }}.ign"
+      loop: "{{ masters }}"
+      loop_control:
+        loop_var: node
+        label: "{{ fqdn }}"
+      vars:
+        node_type: "master"
+        hostname: "{{ node['name'] }}"
+        ip_mgmt: "{{ node['ip_mgmt'] }}"
+        ip_cluster: "{{ node['ip_cluster'] }}"
+        ip_outbound: "{{ node['ip_outbound'] }}"
+        fqdn: "{{ node['name'] }}.{{ cluster_domain }}"

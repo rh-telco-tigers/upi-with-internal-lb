@@ -9,6 +9,24 @@ all:
       cluster_domain: 'nfvdev.tlabs.ca'
       ocp_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCfjdWVDxtNZW5Mrb3lxfmison8iWG/diFyORcV7yKbPgzUQwk29GBbYjjR2RN5i/8Dud+SjZMGGZZtCLVO9uivHtfViC0Nu+vcTuFHgSOf/4aHxH2mYa5VYgwpAP5Ov/2lKkibM1CoF+noPdh+Gl8Izhc4ZTlNjOhG7jpVVgnd4WoK0tX5AiJ3fz3WYcDzZ4yQBNa/J43HP64l/6PX3CzgNGBVSbBHukYyzYHkIuFvSYPgnNW+dLrDx+uDypvnjYV5lYh+9jrW3lzMwiNQSzdDO30I6jupr8A05jtD5zA4maJDwUkAtcHVxc5Z2KEXlh7xWurES4amzScsHFSx3r2/NgzjD96h22BmPLN/tbZ19n21Bsb774b+vw0L471FFbsgkmiOYQcyNqcySFmeozsWixjxN2tG1VfqnH8pR189IYOX9e4YOHvYYV/5NzLjwIj2uLfGtqBOMdBGbMGyR/VeYyg9sz1nQ3mqs/sYo3OB0j+4TZeI9uJB4NZKoN4RjOc= stack@osp.home.lab
 
+      bootstrap:
+        name: "bootstrap"
+        ip_cluster: "172.21.104.6"
+        ip_mgmt: "172.21.104.70"
+      masters:
+      - name: "m01"
+        ip_cluster: "172.21.104.7"
+        ip_mgmt: "172.21.104.71"
+        ip_outbound: "172.21.105.195"
+      - name: "m02"
+        ip_cluster: "172.21.104.8"
+        ip_mgmt: "172.21.104.72"
+        ip_outbound: "172.21.105.196"
+      - name: "m03"
+        ip_cluster: "172.21.104.9"
+        ip_mgmt: "172.21.104.73"
+        ip_outbound: "172.21.105.197"
+
       # User-provided values
       os_subnet_range: '172.21.104.0/26'
       os_flavor_master: '6-12G-120'
