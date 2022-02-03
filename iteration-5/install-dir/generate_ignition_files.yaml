@@ -21,4 +21,5 @@
         ip_mgmt: "{{ node['ip_mgmt'] }}"
         ip_cluster: "{{ node['ip_cluster'] }}"
         ip_outbound: "{{ node['ip_outbound'] }}"
+        ip_public: "{{ node['ip_public'] }}"
         fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
