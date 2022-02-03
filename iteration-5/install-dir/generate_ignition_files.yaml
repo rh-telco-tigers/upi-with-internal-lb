@@ -30,7 +30,7 @@
       set_fact:
         files: []
   
-    - name: generate bootsrap ignition files
+    - name: generate light bootstrap ignition files
       template:
         src: templates/bootstrap-light-ignition.ign.j2
         dest: "../scripts/{{ cluster_domain }}/bootstrap-light-ignition.ign"
@@ -52,7 +52,7 @@
       set_fact:
         merged_bootstrap_ignition: "{{ bootstrap_light_ignition | combine (bootstrap_ignition, recursive=True) }}"
 
-
-    - name: print final result
-      debug:
-        var: merged_bootstrap_ignition
+    - name: generate final bootstrap ignition files
+      template:
+        src: templates/bootstrap-final-ignition.ign.j2
+        dest: "../scripts/{{ cluster_domain }}/final-bootstrap.ign"
