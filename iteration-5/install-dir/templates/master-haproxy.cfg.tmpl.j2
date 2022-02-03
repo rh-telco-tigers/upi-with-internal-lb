@@ -1,3 +1,5 @@
+{% raw %}
+
 defaults
   maxconn 20000
   mode    tcp
@@ -33,3 +35,4 @@ backend masters
 {{- range .LBConfig.Backends }}
    server {{ .Host }} {{ .Address }}:{{ .Port }} weight 1 verify none check check-ssl inter 1s fall 2 rise 3
 {{- end }}
+{% endraw %}
