@@ -12,6 +12,7 @@ all:
       keepalived:
         api: 172.21.104.25
         ingress: 172.21.104.26
+        apipublic: 172.21.112.25
 
       bootstrap:
         name: "bootstrap"

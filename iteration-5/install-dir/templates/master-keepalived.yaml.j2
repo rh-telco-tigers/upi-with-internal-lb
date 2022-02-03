@@ -37,9 +37,9 @@ spec:
     - render
     - "/etc/kubernetes/kubeconfig"
     - "--api-vip"
-    - "172.21.104.25"
+    - "{{ keepalived.api }}"
     - "--ingress-vip"
-    - "172.21.104.26"
+    - "{{ keepalived.ingress }}"
     - "/config"
     - "--out-dir"
     - "/etc/keepalived"
@@ -105,9 +105,9 @@ spec:
       set -ex
       # Ensure that we don't have stale VIPs configured
       # See https://bugzilla.redhat.com/show_bug.cgi?id=1931505
-      remove_vip "172.21.104.25"
-      remove_vip "172.21.104.26"
-      remove_vip "172.21.112.25"
+      remove_vip "{{ keepalived.api }}"
+      remove_vip "{{ keepalived.ingress }}"
+      remove_vip "{{ keepalived.apipublic }}"
       declare -r keepalived_sock="/var/run/keepalived/keepalived.sock"
       export -f msg_handler
       export -f reload_keepalived
@@ -159,9 +159,9 @@ spec:
     - "/config/keepalived.conf.tmpl"
     - "/etc/keepalived/keepalived.conf"
     - "--api-vip"
-    - "172.21.104.25"
+    - "{{ keepalived.api }}"
     - "--ingress-vip"
-    - "172.21.104.26"
+    - "{{ keepalived.ingress }}"
     resources:
       requests:
         cpu: 100m
