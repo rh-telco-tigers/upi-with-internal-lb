@@ -29,9 +29,9 @@ spec:
     - render
     - "/etc/kubernetes/kubeconfig"
     - "--api-vip"
-    - "172.21.104.25"
+    - "{{ keepalived.api }}"
     - "--ingress-vip"
-    - "172.21.104.26"
+    - "{{ keepalived.ingress }}"
     - "/config"
     - "--out-dir"
     - "/etc/coredns"

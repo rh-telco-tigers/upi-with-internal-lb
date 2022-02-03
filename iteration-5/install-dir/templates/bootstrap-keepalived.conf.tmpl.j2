@@ -1,3 +1,5 @@
+{% raw %}
+
 # Configuration template for Keepalived, which is used to manage the DNS and
 # API VIPs.
 #
@@ -26,3 +28,4 @@ vrrp_instance {{.Cluster.Name}}_API {
         {{ .Cluster.APIVIP }}/{{ .Cluster.VIPNetmask }}
     }
 }
+{% endraw %}
