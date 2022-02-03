@@ -15,7 +15,7 @@
     template IN {{ .Cluster.IngressVIPRecordType }} {% endraw %} {{ cluster_name }}.{{ cluster_domain }} {
         match .*.apps.{{ cluster_name }}.{{ cluster_domain }}
 {% raw %}
-        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} {% endraw %} 172.21.104.26"
+        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} {% endraw %} {{ keepalived.ingress }}"
         fallthrough
     }
 {% raw %}
@@ -26,7 +26,7 @@
 {% raw %}
     template IN {{ .Cluster.APIVIPRecordType }} {% endraw %} {{ cluster_name }}.{{ cluster_domain }} {
         match api.{{ cluster_name }}.{{ cluster_domain }}
-        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.104.25"
+        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} {{ keepalived.api }}"
         fallthrough
     }
 {% raw %}
@@ -37,7 +37,7 @@
 {% raw %}
     template IN {{ .Cluster.APIVIPRecordType }} {% endraw %} {{ cluster_name }}.{{ cluster_domain }} {
         match api-int.{{ cluster_name }}.{{ cluster_domain }}
-        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} 172.21.104.25"
+        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} {{ keepalived.api }}"
         fallthrough
     }
 {% raw %}
