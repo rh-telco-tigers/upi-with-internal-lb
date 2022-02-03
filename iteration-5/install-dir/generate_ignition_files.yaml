@@ -5,6 +5,8 @@
     master_ignition_file: "../scripts/{{ cluster_domain }}/master.ign"
     master_ignition_content: "{{ lookup('file', master_ignition_file) }}"
     certificate_bundle_line: "{{ master_ignition_content | json_query('ignition.security.tls.certificateAuthorities[0].source') }}"
+    bootstrap_ignition: "../scripts/{{ cluster_domain }}/bootstrap.ign"
+    bootstrap_light_ignition: "../scripts/{{ cluster_domain }}/bootstrap-light-ignition.ign"
 
   tasks:
     - name: generate master ignition files
@@ -32,3 +34,10 @@
       template:
         src: templates/bootstrap-light-ignition.ign.j2
         dest: "../scripts/{{ cluster_domain }}/bootstrap-light-ignition.ign"
+
+    - name: Create interfaces Dictionary
+      set_fact:
+        bootstrap_ignition_files: "{{ bootstrap_ignition.storage.files }}"
+        bootstrap_light_ignition_files: "{{ bootstrap_light_ignition.storage.files }}"
+
+
