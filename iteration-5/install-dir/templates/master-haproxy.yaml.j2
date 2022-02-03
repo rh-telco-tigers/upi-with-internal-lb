@@ -109,7 +109,7 @@ spec:
       - "-c"
       - |            
         cp /host/etc/resolv.conf /etc/resolv.conf
-        monitor /var/lib/kubelet/kubeconfig  /config/haproxy.cfg.tmpl  /etc/haproxy/haproxy.cfg  --api-vip 172.21.104.25
+        monitor /var/lib/kubelet/kubeconfig  /config/haproxy.cfg.tmpl  /etc/haproxy/haproxy.cfg  --api-vip {{ keepalived.api }}
     resources:
       requests:
         cpu: 100m

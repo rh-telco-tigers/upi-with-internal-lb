@@ -78,12 +78,12 @@ vrrp_instance {{ .Cluster.Name }}_API_EXTERNAL {
         {{end}}
     }
     {{end}}
+{% endraw %}
     authentication {
         auth_type PASS
         auth_pass password
     }
     virtual_ipaddress {
-        172.21.112.25/32
+        {{ keepalived.api }}/32
     }
 }
-{% endraw %}
