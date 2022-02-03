@@ -5,7 +5,7 @@
         "path": "/etc/hostname",
         "mode": 420,
         "contents": {
-          "source": "data:text/plain;charset=utf-8;base64,b2NwMzAwLXNtOXd6LW1hc3Rlci0wCg==",
+          "source": "data:text/plain;charset=utf-8;base64,{{ fqdn | b64encode }}",
           "verification": {}
         },
         "filesystem": "root"
@@ -14,7 +14,7 @@
         "path": "/etc/mdns/hostname",
         "mode": 420,
         "contents": {
-          "source": "data:text/plain;charset=utf-8;base64,b2NwMzAwLXNtOXd6LW1hc3Rlci0wCg==",
+          "source": "data:text/plain;charset=utf-8;base64,{{ fqdn | b64encode }}",
           "verification": {}
         },
         "filesystem": "root"
@@ -160,7 +160,7 @@
         "mode": 420,
         "overwrite": true,
         "contents": {
-            "source": "data:text/plain;charset=utf-8;base64,{{ lookup('template', 'master-kubelet.service.d-80-nodeip.conf.j2') | b64encode }}"
+           "source": "data:text/plain;charset=utf-8;base64,{{ ("[Service]\nEnvironment=KUBELET_NODE_IP=\""+ip_cluster+"\"\n") | b64encode }}"
         }
       }
     ]
