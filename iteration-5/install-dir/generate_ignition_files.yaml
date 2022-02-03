@@ -43,14 +43,13 @@
       set_fact:
         bootstrap_light_ignition: "{{ lookup('file','../scripts/{{ cluster_domain }}/bootstrap-light-ignition.ign') | from_json }}"
 
-    - name: Create interfaces Dictionary
+    - name: merge bootstrap ignition files object
       set_fact:
-        bootstrap_ignition_files: "{{ bootstrap_ignition }}"
-        bootstrap_light_ignition_files: "{{ bootstrap_light_ignition }}"
+        merged_bootstrap_ignition_files: "{{ bootstrap_light_ignition.storage.files | combine (bootstrap_ignition.storage.files, recursive=True) }}"
 
-    - name: merge bootstrap ignition
+    - name: Create final boostrap ignition object
       set_fact:
-        merged_bootstrap_ignition: "{{ bootstrap_light_ignition | combine (bootstrap_ignition, recursive=True) }}"
+        merged_bootstrap_ignition: "{{ merged_bootstrap_ignition_files }}"
 
     - name: generate final bootstrap ignition files
       template:
