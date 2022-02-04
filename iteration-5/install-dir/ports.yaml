@@ -74,16 +74,16 @@
     with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
     register: portsoutbound
 
-  - name: 'List the Control Plane Trunks'
-    command:
-      cmd: "openstack network trunk list"
-    when: os_networking_type == "Kuryr"
-    register: control_plane_trunks
+  # - name: 'List the Control Plane Trunks'
+  #   command:
+  #     cmd: "openstack network trunk list"
+  #   when: os_networking_type == "Kuryr"
+  #   register: control_plane_trunks
 
-  - name: 'Create the Control Plane trunks'
-    command:
-      cmd: "openstack network trunk create --parent-port {{ item.1.id }} {{ os_cp_trunk_name }}-{{ item.0 }}"
-    with_indexed_items: "{{ ports.results }}"
-    when:
-    - os_networking_type == "Kuryr"
-    - "os_cp_trunk_name|string not in control_plane_trunks.stdout"
+  # - name: 'Create the Control Plane trunks'
+  #   command:
+  #     cmd: "openstack network trunk create --parent-port {{ item.1.id }} {{ os_cp_trunk_name }}-{{ item.0 }}"
+  #   with_indexed_items: "{{ ports.results }}"
+  #   when:
+  #   - os_networking_type == "Kuryr"
+  #   - "os_cp_trunk_name|string not in control_plane_trunks.stdout"
