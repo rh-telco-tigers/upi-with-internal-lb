@@ -35,7 +35,7 @@ all:
         ip_cluster: "172.21.104.23"
         ip_mgmt: "172.21.104.73"
         ip_outbound: "172.21.105.197"
-        ip_public: "172.21.112.22"
+        ip_public: "172.21.112.23"
 
       networks:
         management:
