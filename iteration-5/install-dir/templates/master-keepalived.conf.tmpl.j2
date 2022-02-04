@@ -84,6 +84,6 @@ vrrp_instance {{ .Cluster.Name }}_API_EXTERNAL {
         auth_pass password
     }
     virtual_ipaddress {
-        {{ keepalived.api }}/32
+        {{ keepalived.apipublic }}/32
     }
 }
