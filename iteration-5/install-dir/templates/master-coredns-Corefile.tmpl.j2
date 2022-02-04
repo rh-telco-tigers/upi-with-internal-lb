@@ -26,7 +26,8 @@
 {% raw %}
     template IN {{ .Cluster.APIVIPRecordType }} {% endraw %} {{ cluster_name }}.{{ cluster_domain }} {
         match api.{{ cluster_name }}.{{ cluster_domain }}
-        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} {{ keepalived.api }}"
+{% raw %}
+        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} {% endraw %} {{ keepalived.api }}"
         fallthrough
     }
 {% raw %}
@@ -37,7 +38,8 @@
 {% raw %}
     template IN {{ .Cluster.APIVIPRecordType }} {% endraw %} {{ cluster_name }}.{{ cluster_domain }} {
         match api-int.{{ cluster_name }}.{{ cluster_domain }}
-        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} {{ keepalived.api }}"
+{% raw %}
+        answer "{{"{{ .Name }}"}} 60 in {{"{{ .Type }}"}} {% endraw %} {{ keepalived.api }}"
         fallthrough
     }
 {% raw %}
