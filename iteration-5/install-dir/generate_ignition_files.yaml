@@ -32,7 +32,7 @@
     - name: generate master ignition files
       template:
         src: templates/master-ignition.ign.j2
-        dest: "../scripts/{{ cluster_name }}.{{ cluster_domain }}/{{ hostname }}.ign"
+        dest: "../scripts/{{ cluster_name }}.{{ cluster_domain }}/{{ cluster_name }}-{{ node_type }}-{{ hostname }}-ignition.json"
       loop: "{{ masters }}"
       loop_control:
         loop_var: node
