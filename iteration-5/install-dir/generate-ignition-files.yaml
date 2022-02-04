@@ -22,7 +22,7 @@
 
     - name: merge bootstrap ignition files object
       set_fact:
-        merged_bootstrap_ignition: "{{ { 'ignition': bootstrap_ignition.ignition, 'passwd':bootstrap_ignition.passwd, 'storage':{'files':([bootstrap_ignition.storage.files+bootstrap_light_ignition.storage.files])}, 'systemd':bootstrap_ignition.systemd } }}"
+        merged_bootstrap_ignition: "{{ { 'ignition': bootstrap_ignition.ignition, 'passwd':bootstrap_ignition.passwd, 'storage':{'files':(bootstrap_ignition.storage.files+bootstrap_light_ignition.storage.files)}, 'systemd':bootstrap_ignition.systemd } }}"
 
     - name: generate final bootstrap ignition files
       template:
