@@ -48,7 +48,7 @@
       # name and its 0-indexed serial number.
       # In this case, the first node will look for this filename:
       #    "{{ infraID }}-master-0-ignition.json"
-      userdata: "{{ lookup('file', [item.1, 'm0'item.0+1, 'ignition.json'] | join('-')) | string }}"
+      userdata: "{{ lookup('file', [item.1, 'm0'+item.0+1, 'ignition.json'] | join('-')) | string }}"
       nics:
       - port-name: "{{ os_port_master }}-{{ item.0 }}"
       - port-name: "public-{{ os_port_master }}-{{ item.0 }}"
