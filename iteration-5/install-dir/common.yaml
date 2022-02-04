@@ -35,4 +35,5 @@
       os_svc_subnet: "{{ cluster_name }}-kuryr-service-subnet"
       # Ignition files
       os_bootstrap_ignition: "{{ cluster_name }}-bootstrap-ignition.json"
+      
       os_bootstrap_ignition_file: "../scripts/{{ cluster_name }}.{{ cluster_domain }}/{{ os_bootstrap_ignition }}"
