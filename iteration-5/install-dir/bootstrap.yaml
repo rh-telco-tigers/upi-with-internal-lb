@@ -14,15 +14,15 @@
   - name: 'Create the bootstrap server port'
     os_port:
       name: "{{ os_port_bootstrap }}"
-      network: "{{ os_network }}"
+      network: "{{ cluster_network }}"
       fixed_ips: 
-      - ip_address: "{{ os_subnet_range | next_nth_usable(20) }}"
+      - ip_address: "{{ cluster_subnet_range | next_nth_usable(20) }}"
       security_groups:
       - "{{ os_sg_master }}"
       allowed_address_pairs:
-      - ip_address: "{{ os_subnet_range | next_nth_usable(21) }}"
-      - ip_address: "{{ os_subnet_range | next_nth_usable(22) }}"
-      - ip_address: "{{ os_subnet_range | next_nth_usable(25) }}"
+      - ip_address: "{{ cluster_subnet_range | next_nth_usable(21) }}"
+      - ip_address: "{{ cluster_subnet_range | next_nth_usable(22) }}"
+      - ip_address: "{{ cluster_subnet_range | next_nth_usable(25) }}"
 
   - name: 'Set bootstrap auto_ip to false'
     ansible.builtin.set_fact:
