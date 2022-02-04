@@ -34,7 +34,7 @@
       name: "{{ os_bootstrap_server_name }}"
       image: "{{ os_image_rhcos }}"
       flavor: "{{ os_flavor_master }}"
-      userdata: "{{ lookup('file', os_bootstrap_ignition_file) | string }}"
+      userdata: "{{ lookup('file', os_bootstrap_ignition) | string }}"
       auto_ip: "{{ bootstrap_auto_ip | default(omit) }}"
       nics:
       - port-name: "{{ os_port_bootstrap }}"
