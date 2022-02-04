@@ -11,7 +11,7 @@
 
   tasks:
   - name: 'List security groups'
-    ansible.builtin.shell: openstack security group list -f json | jq '.[] | select(.Name | test({{ cluster_name | quote | string }})) | .ID'
+    ansible.builtin.shell: openstack security group list -f json | jq -r '.[] | select(.Name | test("{{ cluster_name }}")) | .ID'
     register: security_groups
 
   - name: 'Remove the cluster security groups'
