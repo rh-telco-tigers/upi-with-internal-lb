@@ -22,11 +22,6 @@
     with_indexed_items: "{{ [os_port_worker] * os_compute_nodes_number }}"
     register: ports
 
-  - name: 'Set Compute ports tag'
-    command:
-      cmd: "openstack port set --tag {{ cluster_id_tag }} {{ item.1 }}-{{ item.0 }}"
-    with_indexed_items: "{{ [os_port_worker] * os_compute_nodes_number }}"
-
   - name: 'Create the Compute servers'
     os_server:
       name: "{{ item.1 }}-{{ item.0 }}"
