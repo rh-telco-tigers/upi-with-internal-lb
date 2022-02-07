@@ -11,15 +11,36 @@
   gather_facts: no
 
   tasks:
-  - name: 'Create the Compute ports'
+  # - name: 'Create the Compute ports'
+  #   os_port:
+  #     name: "{{ item.1 }}-{{ item.0 }}"
+  #     network: "{{ cluster_network }}"
+  #     security_groups:
+  #     - "{{ os_sg_worker }}"
+  #     allowed_address_pairs:
+  #     - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(7) }}"
+  #   with_indexed_items: "{{ [os_port_worker] * os_compute_nodes_number }}"
+  #   register: ports
+
+  - name: 'Create the Compute Ports'
     os_port:
-      name: "{{ item.1 }}-{{ item.0 }}"
+      name: "{{ node_type }}-{{ hostname }}"
       network: "{{ cluster_network }}"
+      fixed_ips: 
+      - ip_address: "{{ ip_cluster }}"
       security_groups:
       - "{{ os_sg_worker }}"
       allowed_address_pairs:
-      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(7) }}"
-    with_indexed_items: "{{ [os_port_worker] * os_compute_nodes_number }}"
+      - ip_address: "{{ ip_cluster }}"
+    loop: "{{ workers }}"
+    loop_control:
+      loop_var: node
+      label: "{{ fqdn }}"
+    vars:
+      node_type: "worker"
+      hostname: "{{ node['name'] }}"
+      ip_cluster: "{{ node['ip_cluster'] }}"
+      fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
     register: ports
 
   - name: 'Create the Compute servers'

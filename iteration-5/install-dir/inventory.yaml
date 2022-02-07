@@ -37,6 +37,19 @@ all:
         ip_outbound: "172.21.105.210"
         ip_public: "172.21.112.23"
 
+      workers:
+      - name: "n01"
+        ip_cluster: "172.21.104.24"
+        ip_mgmt: "172.21.104.87"
+        ip_outbound: "172.21.105.211"
+        ip_public: "172.21.112.24"
+      - name: "n02"
+        ip_cluster: "172.21.104.27"
+        ip_mgmt: "172.21.104.88"
+        ip_outbound: "172.21.105.212"
+        ip_public: "172.21.112.27"
+
+
       networks:
         management:
           mtu: 1500
