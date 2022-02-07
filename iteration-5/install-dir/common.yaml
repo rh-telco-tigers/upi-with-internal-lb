@@ -7,8 +7,6 @@
       cluster_id_tag: "openshiftClusterID={{ cluster_name }}"
       primary_cluster_network_tag: "{{ cluster_name }}-primaryClusterNetwork"
       os_infra_id: "{{ cluster_name }}"
-      # os_network: "ocp30_cluster"
-      # os_subnet: "ocp30_cluster"
       os_router: "{{ cluster_name }}-external-router"
       # Port names
       os_port_api: "{{ cluster_name }}-api-port"

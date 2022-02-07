@@ -194,7 +194,7 @@
 
   - name: 'Create worker-sg rule "Ingress HTTP"'
     os_security_group_rule:
-      security_group: "{{ networks.cluster.ocp_core.cidr }}"
+      security_group: "{{ os_sg_worker }}"
       protocol: tcp
       port_range_min: 80
       port_range_max: 80
