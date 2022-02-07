@@ -12,12 +12,71 @@
   tasks:
   - name: 'Remove the Compute servers'
     os_server:
-      name: "{{ item.1 }}-{{ item.0 }}"
+      name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}"
       state: absent
-    with_indexed_items: "{{ [os_compute_server_name] * os_compute_nodes_number }}"
+    loop: "{{ workers }}"
+    loop_control:
+      loop_var: node
+      label: "{{ fqdn }}"
+    vars:
+      node_type: "worker"
+      hostname: "{{ node['name'] }}"
+      ip_cluster: "{{ node['ip_cluster'] }}"
+      fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
+    register: ports
 
-  - name: 'Remove the Compute ports'
+  - name: 'Remove the Compute Cluster ports'
     os_port:
-      name: "{{ item.1 }}-{{ item.0 }}"
+      name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-cluster"
       state: absent
-    with_indexed_items: "{{ [os_port_worker] * os_compute_nodes_number }}"
+    loop: "{{ workers }}"
+    loop_control:
+      loop_var: node
+      label: "{{ fqdn }}"
+    vars:
+      node_type: "worker"
+      hostname: "{{ node['name'] }}"
+      fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
+    register: ports
+
+  - name: 'Remove the Compute Outbound ports'
+    os_port:
+      name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-outbound"
+      state: absent
+    loop: "{{ workers }}"
+    loop_control:
+      loop_var: node
+      label: "{{ fqdn }}"
+    vars:
+      node_type: "worker"
+      hostname: "{{ node['name'] }}"
+      fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
+    register: ports
+
+  - name: 'Remove the Compute Management ports'
+    os_port:
+      name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-management"
+      state: absent
+    loop: "{{ workers }}"
+    loop_control:
+      loop_var: node
+      label: "{{ fqdn }}"
+    vars:
+      node_type: "worker"
+      hostname: "{{ node['name'] }}"
+      fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
+    register: ports
+
+  - name: 'Remove the Compute Public ports'
+    os_port:
+      name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-public"
+      state: absent
+    loop: "{{ workers }}"
+    loop_control:
+      loop_var: node
+      label: "{{ fqdn }}"
+    vars:
+      node_type: "worker"
+      hostname: "{{ node['name'] }}"
+      fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
+    register: ports
