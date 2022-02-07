@@ -44,4 +44,4 @@
         ip_cluster: "{{ node['ip_cluster'] }}"
         ip_outbound: "{{ node['ip_outbound'] }}"
         ip_public: "{{ node['ip_public'] }}"
-        fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
+        fqdn: "{{ node['name'] }}.{{ cluster_name }}.{{ cluster_domain }}"
