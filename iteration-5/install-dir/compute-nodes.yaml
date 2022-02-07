@@ -24,7 +24,7 @@
 
   - name: 'Create the Compute Ports'
     os_port:
-      name: "{{ node_type }}-{{ hostname }}"
+      name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-cluster"
       network: "{{ cluster_network }}"
       fixed_ips: 
       - ip_address: "{{ ip_cluster }}"
@@ -45,11 +45,20 @@
 
   - name: 'Create the Compute servers'
     os_server:
-      name: "{{ item.1 }}-{{ item.0 }}"
+      name: "{{cluster_name}}-{{ node_type }}-{{ hostname }}"
       image: "{{ os_image_rhcos }}"
       flavor: "{{ os_flavor_worker }}"
       auto_ip: no
       userdata: "{{ lookup('file', '../scripts/{{ cluster_name }}.{{ cluster_domain }}/worker.ign' ) | string }}"
       nics:
-      - port-name: "{{ os_port_worker }}-{{ item.0 }}"
-    with_indexed_items: "{{ [os_compute_server_name] * os_compute_nodes_number }}"
+      - port-name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-cluster"
+    loop: "{{ workers }}"
+    loop_control:
+      loop_var: node
+      label: "{{ fqdn }}"
+    vars:
+      node_type: "worker"
+      hostname: "{{ node['name'] }}"
+      ip_cluster: "{{ node['ip_cluster'] }}"
+      fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
+    register: ports
