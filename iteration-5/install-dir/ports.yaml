@@ -16,15 +16,15 @@
       name: "{{ item.1 }}-{{ item.0 }}"
       network: "{{ cluster_network }}"
       fixed_ips: 
-      - ip_address: "{{ cluster_subnet_range | next_nth_usable( item.0 + 21 ) }}"
+      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable( item.0 + 21 ) }}"
       security_groups:
       - "{{ os_sg_master }}"
       allowed_address_pairs:
-      - ip_address: "{{ cluster_subnet_range | next_nth_usable(21) }}"
-      - ip_address: "{{ cluster_subnet_range | next_nth_usable(22) }}"
-      - ip_address: "{{ cluster_subnet_range | next_nth_usable(23) }}"
-      - ip_address: "{{ cluster_subnet_range | next_nth_usable(25) }}"
-      - ip_address: "{{ cluster_subnet_range | next_nth_usable(26) }}"
+      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(21) }}"
+      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(22) }}"
+      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(23) }}"
+      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(25) }}"
+      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(26) }}"
     with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
     register: ports
 
@@ -33,15 +33,15 @@
       name: "public-{{ item.1 }}-{{ item.0 }}"
       network: "{{ public_network }}"
       fixed_ips: 
-      - ip_address: "{{ public_subnet_range | next_nth_usable( item.0 + 21 ) }}"
+      - ip_address: "{{ networks.public.ocp_core.cidr | next_nth_usable( item.0 + 21 ) }}"
       security_groups:
       - "{{ os_sg_master }}"
       allowed_address_pairs:
-      - ip_address: "{{ public_subnet_range | next_nth_usable(21) }}"
-      - ip_address: "{{ public_subnet_range | next_nth_usable(22) }}"
-      - ip_address: "{{ public_subnet_range | next_nth_usable(23) }}"
-      - ip_address: "{{ public_subnet_range | next_nth_usable(25) }}"
-      - ip_address: "{{ public_subnet_range | next_nth_usable(26) }}"
+      - ip_address: "{{ networks.public.ocp_core.cidr | next_nth_usable(21) }}"
+      - ip_address: "{{ networks.public.ocp_core.cidr | next_nth_usable(22) }}"
+      - ip_address: "{{ networks.public.ocp_core.cidr | next_nth_usable(23) }}"
+      - ip_address: "{{ networks.public.ocp_core.cidr | next_nth_usable(25) }}"
+      - ip_address: "{{ networks.public.ocp_core.cidr | next_nth_usable(26) }}"
     with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
     register: portspublic
 
@@ -50,7 +50,7 @@
       name: "management-{{ item.1 }}-{{ item.0 }}"
       network: "{{ management_network }}"
       fixed_ips: 
-      - ip_address: "{{ management_subnet_range | next_nth_usable( item.0 + 20 ) }}"
+      - ip_address: "{{ networks.management.ocp_core.cidr | next_nth_usable( item.0 + 20 ) }}"
       security_groups:
       - "{{ os_sg_master }}"
     with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
@@ -61,16 +61,16 @@
       name: "outbound-{{ item.1 }}-{{ item.0 }}"
       network: "{{ outbound_network }}"
       fixed_ips: 
-      - ip_address: "{{ outbound_subnet_range | next_nth_usable( item.0 + 16 ) }}"
+      - ip_address: "{{ networks.outbound.ocp_core.cidr | next_nth_usable( item.0 + 16 ) }}"
       security_groups:
       - "{{ os_sg_master }}"
       allowed_address_pairs:
-      - ip_address: "{{ outbound_subnet_range | next_nth_usable(16) }}"
-      - ip_address: "{{ outbound_subnet_range | next_nth_usable(17) }}"
-      - ip_address: "{{ outbound_subnet_range | next_nth_usable(18) }}"
-      - ip_address: "{{ outbound_subnet_range | next_nth_usable(19) }}"
-      - ip_address: "{{ public_subnet_range | next_nth_usable(25) }}"
-      - ip_address: "{{ public_subnet_range | next_nth_usable(26) }}"
+      - ip_address: "{{ networks.outbound.ocp_core.cidr | next_nth_usable(16) }}"
+      - ip_address: "{{ networks.outbound.ocp_core.cidr | next_nth_usable(17) }}"
+      - ip_address: "{{ networks.outbound.ocp_core.cidr | next_nth_usable(18) }}"
+      - ip_address: "{{ networks.outbound.ocp_core.cidr | next_nth_usable(19) }}"
+      - ip_address: "{{ networks.public.ocp_core.cidr | next_nth_usable(25) }}"
+      - ip_address: "{{ networks.public.ocp_core.cidr | next_nth_usable(26) }}"
     with_indexed_items: "{{ [os_port_master] * os_cp_nodes_number }}"
     register: portsoutbound
 

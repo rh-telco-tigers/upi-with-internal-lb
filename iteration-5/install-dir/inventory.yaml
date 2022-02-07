@@ -77,11 +77,6 @@ all:
       outbound_network: ocp30_outbound
       cluster_network: ocp30_cluster
 
-      public_subnet_range: 172.21.112.0/27
-      management_subnet_range: 172.21.104.64/26
-      outbound_subnet_range: 172.21.105.192/26
-      cluster_subnet_range: 172.21.104.0/26
-
       os_flavor_master: '6-12G-120'
       os_flavor_worker: '6-12G-120'
       os_image_rhcos: 'rhcos-openstack.4.6.47.x86_64.qcow2'
