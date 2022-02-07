@@ -82,4 +82,4 @@ all:
       os_image_rhcos: 'rhcos-openstack.4.6.47.x86_64.qcow2'
 
       os_cp_nodes_number: 3
-      os_compute_nodes_number: 1
+      os_compute_nodes_number: 2
