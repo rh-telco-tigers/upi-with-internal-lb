@@ -22,7 +22,6 @@
       allowed_address_pairs:
       - ip_address: "{{ keepalived.api }}"
       - ip_address: "{{ keepalived.ingress }}"
-      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(25) }}"
 
   - name: 'Set bootstrap auto_ip to false'
     ansible.builtin.set_fact:
