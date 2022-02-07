@@ -16,12 +16,12 @@
       name: "{{ os_port_bootstrap }}"
       network: "{{ cluster_network }}"
       fixed_ips: 
-      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(20) }}"
+      - ip_address: "{{ bootstrap.ip_cluster }}"
       security_groups:
       - "{{ os_sg_master }}"
       allowed_address_pairs:
-      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(21) }}"
-      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(22) }}"
+      - ip_address: "{{ keepalived.api }}"
+      - ip_address: "{{ keepalived.ingress }}"
       - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(25) }}"
 
   - name: 'Set bootstrap auto_ip to false'

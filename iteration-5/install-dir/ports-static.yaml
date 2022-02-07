@@ -21,6 +21,8 @@
       - "{{ os_sg_master }}"
       allowed_address_pairs:
       - ip_address: "{{ ip_cluster }}"
+      - ip_address: "{{ keepalived.api }}"
+      - ip_address: "{{ keepalived.ingress }}"
     loop: "{{ masters }}"
     loop_control:
       loop_var: node
