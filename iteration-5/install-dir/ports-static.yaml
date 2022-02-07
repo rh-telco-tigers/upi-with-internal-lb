@@ -23,11 +23,6 @@
       - ip_address: "{{ ip_cluster }}"
       - ip_address: "{{ keepalived.api }}"
       - ip_address: "{{ keepalived.ingress }}"
-      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(21) }}"
-      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(22) }}"
-      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(23) }}"
-      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(25) }}"
-      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(26) }}"
     loop: "{{ masters }}"
     loop_control:
       loop_var: node
@@ -91,10 +86,6 @@
       - "{{ os_sg_master }}"
       allowed_address_pairs:
       - ip_address: "{{ ip_outbound }}"
-      - ip_address: "{{ networks.outbound.ocp_core.cidr | next_nth_usable(16) }}"
-      - ip_address: "{{ networks.outbound.ocp_core.cidr | next_nth_usable(17) }}"
-      - ip_address: "{{ networks.outbound.ocp_core.cidr | next_nth_usable(18) }}"
-      - ip_address: "{{ networks.outbound.ocp_core.cidr | next_nth_usable(19) }}"
       - ip_address: "{{ keepalived.apipublic }}"
     loop: "{{ masters }}"
     loop_control:
