@@ -38,22 +38,41 @@
     when:
     - server_group_id is not defined
 
+  # - name: 'Create the Control Plane servers'
+  #   os_server:
+  #     name: "{{ item.1 }}-{{ item.0 }}"
+  #     image: "{{ os_image_rhcos }}"
+  #     flavor: "{{ os_flavor_master }}"
+  #     auto_ip: no
+  #     userdata: "{{ lookup('file', '../scripts/{{ cluster_name }}.{{ cluster_domain }}/{{ item.1 }}-m0{{ item.0+1 }}-ignition.json' ) | string }}"
+  #     nics:
+  #     - port-name: "{{ os_port_master }}-{{ item.0 }}"
+  #     - port-name: "public-{{ os_port_master }}-{{ item.0 }}"
+  #     - port-name: "management-{{ os_port_master }}-{{ item.0 }}"
+  #     - port-name: "outbound-{{ os_port_master }}-{{ item.0 }}"
+  #     scheduler_hints:
+  #       group: "{{ server_group_id }}"
+  #   with_indexed_items: "{{ [os_cp_server_name] * os_cp_nodes_number }}"
+
+
   - name: 'Create the Control Plane servers'
     os_server:
-      name: "{{ item.1 }}-{{ item.0 }}"
+      name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}"
       image: "{{ os_image_rhcos }}"
       flavor: "{{ os_flavor_master }}"
       auto_ip: no
-      # The ignition filename will be concatenated with the Control Plane node
-      # name and its 0-indexed serial number.
-      # In this case, the first node will look for this filename:
-      #    "{{ infraID }}-master-0-ignition.json"
-      userdata: "{{ lookup('file', '../scripts/{{ cluster_name }}.{{ cluster_domain }}/{{ item.1 }}-m0{{ item.0+1 }}-ignition.json' ) | string }}"
+      userdata: "{{ lookup('file', '../scripts/{{ cluster_name }}.{{ cluster_domain }}/{{ cluster_name }}-{{ node_type }}-{{ hostname }}-ignition.json' ) | string }}"
       nics:
-      - port-name: "{{ os_port_master }}-{{ item.0 }}"
-      - port-name: "public-{{ os_port_master }}-{{ item.0 }}"
-      - port-name: "management-{{ os_port_master }}-{{ item.0 }}"
-      - port-name: "outbound-{{ os_port_master }}-{{ item.0 }}"
-      scheduler_hints:
-        group: "{{ server_group_id }}"
-    with_indexed_items: "{{ [os_cp_server_name] * os_cp_nodes_number }}"
+      - port-name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-cluster"
+      - port-name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-management"
+      - port-name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-outbound"
+      - port-name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-public"
+    loop: "{{ masters }}"
+    loop_control:
+      loop_var: node
+      label: "{{ fqdn }}"
+    vars:
+      node_type: "master"
+      hostname: "{{ node['name'] }}"
+      ip_cluster: "{{ node['ip_cluster'] }}"
+      fqdn: "{{ node['name'] }}.{{ cluster_domain }}"

@@ -1,0 +1,96 @@
+# Required Python packages:
+#
+# ansible
+# openstackclient
+# openstacksdk
+# netaddr
+
+- import_playbook: common.yaml
+
+- hosts: all
+  gather_facts: no
+
+  tasks:
+  - name: 'Create the Master Cluster Ports'
+    os_port:
+      name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-cluster"
+      network: "{{ cluster_network }}"
+      fixed_ips: 
+      - ip_address: "{{ ip_cluster }}"
+      security_groups:
+      - "{{ os_sg_master }}"
+      allowed_address_pairs:
+      - ip_address: "{{ ip_cluster }}"
+    loop: "{{ masters }}"
+    loop_control:
+      loop_var: node
+      label: "{{ fqdn }}"
+    vars:
+      node_type: "master"
+      hostname: "{{ node['name'] }}"
+      ip_cluster: "{{ node['ip_cluster'] }}"
+      fqdn: "{{ cluster_name }}.{{ node['name'] }}.{{ cluster_domain }}"
+    register: portscluster
+
+  - name: 'Create the Compute Management Ports'
+    os_port:
+      name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-management"
+      network: "{{ management_network }}"
+      fixed_ips: 
+      - ip_address: "{{ ip_mgmt }}"
+      security_groups:
+      - "{{ os_sg_master }}"
+      allowed_address_pairs:
+      - ip_address: "{{ ip_mgmt }}"
+    loop: "{{ masters }}"
+    loop_control:
+      loop_var: node
+      label: "{{ cluster_name }}.{{ fqdn }}"
+    vars:
+      node_type: "master"
+      hostname: "{{ node['name'] }}"
+      ip_mgmt: "{{ node['ip_mgmt'] }}"
+      fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
+    register: portsmanagement
+
+  - name: 'Create the Compute Outbound Ports'
+    os_port:
+      name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-outbound"
+      network: "{{ outbound_network }}"
+      fixed_ips: 
+      - ip_address: "{{ ip_outbound }}"
+      security_groups:
+      - "{{ os_sg_master }}"
+      allowed_address_pairs:
+      - ip_address: "{{ ip_outbound }}"
+    loop: "{{ masters }}"
+    loop_control:
+      loop_var: node
+      label: "{{ cluster_name }}.{{ fqdn }}"
+    vars:
+      node_type: "master"
+      hostname: "{{ node['name'] }}"
+      ip_outbound: "{{ node['ip_outbound'] }}"
+      fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
+    register: portsoutbound
+
+  - name: 'Create the Compute Public Ports'
+    os_port:
+      name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-public"
+      network: "{{ public_network }}"
+      fixed_ips: 
+      - ip_address: "{{ ip_public }}"
+      security_groups:
+      - "{{ os_sg_master }}"
+      allowed_address_pairs:
+      - ip_address: "{{ ip_public }}"
+    loop: "{{ masters }}"
+    loop_control:
+      loop_var: node
+      label: "{{ cluster_name }}.{{ fqdn }}"
+    vars:
+      node_type: "master"
+      hostname: "{{ node['name'] }}"
+      ip_public: "{{ node['ip_public'] }}"
+      fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
+    register: portspublic
