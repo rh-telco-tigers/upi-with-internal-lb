@@ -43,6 +43,6 @@ EOF
 
 ## Create cluster
 ansible-playbook -i inventory.yaml security-groups.yaml
-ansible-playbook -i inventory.yaml ports.yaml
+ansible-playbook -i inventory.yaml ports-static.yaml
 ansible-playbook -i inventory.yaml bootstrap.yaml
 ansible-playbook -i inventory.yaml control-plane.yaml
