@@ -64,9 +64,9 @@
       userdata: "{{ lookup('file', '../scripts/{{ cluster_name }}.{{ cluster_domain }}/{{ cluster_name }}-{{ node_type }}-{{ hostname }}-ignition.json' ) | string }}"
       nics:
       - port-name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-cluster"
+      - port-name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-public"
       - port-name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-management"
       - port-name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-outbound"
-      - port-name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-public"
     loop: "{{ masters }}"
     loop_control:
       loop_var: node
