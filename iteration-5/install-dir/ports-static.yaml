@@ -23,6 +23,11 @@
       - ip_address: "{{ ip_cluster }}"
       - ip_address: "{{ keepalived.api }}"
       - ip_address: "{{ keepalived.ingress }}"
+      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(21) }}"
+      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(22) }}"
+      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(23) }}"
+      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(25) }}"
+      - ip_address: "{{ networks.cluster.ocp_core.cidr | next_nth_usable(26) }}"
     loop: "{{ masters }}"
     loop_control:
       loop_var: node
@@ -33,6 +38,27 @@
       ip_cluster: "{{ node['ip_cluster'] }}"
       fqdn: "{{ cluster_name }}.{{ node['name'] }}.{{ cluster_domain }}"
     register: portscluster
+
+  - name: 'Create the Compute Public Ports'
+    os_port:
+      name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-public"
+      network: "{{ public_network }}"
+      fixed_ips: 
+      - ip_address: "{{ ip_public }}"
+      security_groups:
+      - "{{ os_sg_master }}"
+      allowed_address_pairs:
+      - ip_address: "{{ ip_public }}"
+    loop: "{{ masters }}"
+    loop_control:
+      loop_var: node
+      label: "{{ cluster_name }}.{{ fqdn }}"
+    vars:
+      node_type: "master"
+      hostname: "{{ node['name'] }}"
+      ip_public: "{{ node['ip_public'] }}"
+      fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
+    register: portspublic
 
   - name: 'Create the Compute Management Ports'
     os_port:
@@ -65,6 +91,11 @@
       - "{{ os_sg_master }}"
       allowed_address_pairs:
       - ip_address: "{{ ip_outbound }}"
+      - ip_address: "{{ networks.outbound.ocp_core.cidr | next_nth_usable(16) }}"
+      - ip_address: "{{ networks.outbound.ocp_core.cidr | next_nth_usable(17) }}"
+      - ip_address: "{{ networks.outbound.ocp_core.cidr | next_nth_usable(18) }}"
+      - ip_address: "{{ networks.outbound.ocp_core.cidr | next_nth_usable(19) }}"
+      - ip_address: "{{ keepalived.apipublic }}"
     loop: "{{ masters }}"
     loop_control:
       loop_var: node
@@ -75,24 +106,3 @@
       ip_outbound: "{{ node['ip_outbound'] }}"
       fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
     register: portsoutbound
-
-  - name: 'Create the Compute Public Ports'
-    os_port:
-      name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-public"
-      network: "{{ public_network }}"
-      fixed_ips: 
-      - ip_address: "{{ ip_public }}"
-      security_groups:
-      - "{{ os_sg_master }}"
-      allowed_address_pairs:
-      - ip_address: "{{ ip_public }}"
-    loop: "{{ masters }}"
-    loop_control:
-      loop_var: node
-      label: "{{ cluster_name }}.{{ fqdn }}"
-    vars:
-      node_type: "master"
-      hostname: "{{ node['name'] }}"
-      ip_public: "{{ node['ip_public'] }}"
-      fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
-    register: portspublic
