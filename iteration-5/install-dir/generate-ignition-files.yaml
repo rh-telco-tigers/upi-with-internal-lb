@@ -45,3 +45,20 @@
         ip_outbound: "{{ node['ip_outbound'] }}"
         ip_public: "{{ node['ip_public'] }}"
         fqdn: "{{ node['name'] }}.{{ cluster_name }}.{{ cluster_domain }}"
+
+    - name: generate worker ignition files
+      template:
+        src: templates/worker.ign.j2
+        dest: "../scripts/{{ cluster_name }}.{{ cluster_domain }}/{{ cluster_name }}-{{ node_type }}-{{ hostname }}-ignition.json"
+      loop: "{{ workers }}"
+      loop_control:
+        loop_var: node
+        label: "{{ fqdn }}"
+      vars:
+        node_type: "worker"
+        hostname: "{{ node['name'] }}"
+        ip_mgmt: "{{ node['ip_mgmt'] }}"
+        ip_cluster: "{{ node['ip_cluster'] }}"
+        ip_outbound: "{{ node['ip_outbound'] }}"
+        ip_public: "{{ node['ip_public'] }}"
+        fqdn: "{{ node['name'] }}.{{ cluster_name }}.{{ cluster_domain }}"

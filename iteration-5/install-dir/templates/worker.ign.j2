@@ -1,9 +1,31 @@
 {
+"storage": {
+    "files": [
+      {
+        "path": "/etc/hostname",
+        "mode": 420,
+        "contents": {
+          "source": "data:text/plain;charset=utf-8;base64,{{ fqdn | b64encode }}",
+          "verification": {}
+        },
+        "filesystem": "root"
+      },
+      {
+        "path": "/etc/mdns/hostname",
+        "mode": 420,
+        "contents": {
+          "source": "data:text/plain;charset=utf-8;base64,{{ fqdn | b64encode }}",
+          "verification": {}
+        },
+        "filesystem": "root"
+        }
+    ]
+  },
   "ignition": {
     "config": {
       "merge": [
         {
-          "source": "https://api-int.ocp300.nfvdev.tlabs.ca:22623/config/worker"
+          "source": "https://api-int.{{ cluster_name }}.{{ cluster_domain }}:22623/config/{{ node_type }}"
         }
       ]
     },
@@ -11,7 +33,7 @@
       "tls": {
         "certificateAuthorities": [
           {
-            "source": "data:text/plain;charset=utf-8;base64,LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURZVENDQWttZ0F3SUJBZ0lJUXpMWWNHbFJ5VHd3RFFZSktvWklodmNOQVFFTEJRQXdKakVTTUJBR0ExVUUKQ3hNSmIzQmxibk5vYVdaME1SQXdEZ1lEVlFRREV3ZHliMjkwTFdOaE1CNFhEVEl5TURJd05ESXpORE14TkZvWApEVE15TURJd01qSXpORE14TlZvd0p6RWxNQ01HQTFVRUF4TWNjM2x6ZEdWdE9tMWhZMmhwYm1VdFkyOXVabWxuCkxYTmxjblpsY2pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTURRMnNtVC9PM3UKRjhjV0ZRdXR0c21TeGNwTkJhZDZSMTdpd0lpZEVIYmdqNnFEY0kwSno5Q1diT0lNd0s4STR6WWVPRncva21VQgpjTjZLaW53WGIyWXlLejZMNXhnZlY4TDNpTVA4SS8zemlMN0FJc0IxcHNJS3lBRkRrSkRheHhkTnNmUEhaREVsCnRXTk1QNERtV2g0M2NXN0dBVGVkbkRvWkNlUEJ5ZTY4NnVxcm8yeFFQUU0rckplK0xRQnZGTVdMY2pzZm1wcEsKMkkvMTM4b2NFSU1EY0pLcWpKanNyM1ViN2JDdlNseDBqdlY4aXorR3p4Z0lKWUdjSkRCUGVnTGR0Y2xJY2pPSAo4QWlxbDBKMEJneEVqbGtBMGF6bklCYmQrN2JJOHNwei93ZDBoOE05Q1J1Nlk1L091WWFJYnlvSU1Gb0JGNFA4CmUydVhlRXpjNGJrQ0F3RUFBYU9Ca1RDQmpqQVRCZ05WSFNVRUREQUtCZ2dyQmdFRkJRY0RBVEFNQmdOVkhSTUIKQWY4RUFqQUFNQjBHQTFVZERnUVdCQlRUTnVudG10SmdKbXZjb1RqSFQ1cWUwclNEblRBZkJnTlZIU01FR0RBVwpnQlJWczFla1JFZm9KLzlNMmxlV0I4Sm9TZzNHM1RBcEJnTlZIUkVFSWpBZ2doNWhjR2t0YVc1MExtOWpjRE13Ck1DNXVablprWlhZdWRHeGhZbk11WTJFd0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFDRUFlTWpKVnNuWWthZ0UKWVNKaWR1ODY5TU5nS2tmM2p2R3kyemNSMTBHRlh2cHRqVEhVN2d2Z2FVZDNwTjhYWFRpVFllY1BVY1pENFdBSApuaThoMzBiYk4vUG9mZ1FldEpYMkwwY3hFZ1FNTVhoa1IxUFJSaThwZDVZeGFMMWJmRFFvQ3E3ajlGZjExREM4Ck5WaS9mcGlQZzFKQ0pUaXVYRm9pL0xZRjJkRkZMRmlzdmw4Z0RZRlRjUjZ4dTRiRlZvZ09tazBPL2psblJWelQKb1BzU0pDbnpISkJQQ0pNZFgyNjdkUzRzekl1Nk51Zk5MQ0g0Q1pUNlFTdU1rS0dOT0hUeS92aDdXQmNMN3RXVwpCSitoWXQ2RUhYV1ZabDgxZzZhN1A3Zy9sR3hXNEVEaHp0L0hLaVlSYi9YK0d3VHNoWHFJeSt3VWVrTlc0anNoCnJFdnhwcTg9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+            "source": "data:text/plain;charset=utf-8;base64,{{ certificate_bundle_line }}"
           }
         ]
       }
