@@ -66,6 +66,7 @@
       - "{{ os_sg_master }}"
       allowed_address_pairs:
       - ip_address: "{{ ip_mgmt }}"
+      - ip_address: "{{ keepalived.apipublic }}"
     loop: "{{ masters }}"
     loop_control:
       loop_var: node
