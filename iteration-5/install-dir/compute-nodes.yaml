@@ -126,5 +126,5 @@
       node_type: "worker"
       hostname: "{{ node['name'] }}"
       ip_cluster: "{{ node['ip_cluster'] }}"
-      fqdn: "{{ node['name'] }}.{{ cluster_domain }}"
+      fqdn: "{{ node['name'] }}.{{ cluster_name }}.{{ cluster_domain }}"
     register: ports
