@@ -112,7 +112,7 @@
       image: "{{ os_image_rhcos }}"
       flavor: "{{ os_flavor_worker }}"
       auto_ip: no
-      userdata: "{{ lookup('file', '../scripts/{{ cluster_name }}.{{ cluster_domain }}/worker.ign' ) | string }}"
+      userdata: "{{ lookup('file', '../scripts/{{ cluster_name }}.{{ cluster_domain }}/{{ cluster_name }}-{{ node_type }}-{{ hostname }}-ignition.json' ) | string }}"
       nics:
       - port-name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-cluster"
       - port-name: "{{ cluster_name }}-{{ node_type }}-{{ hostname }}-public"
