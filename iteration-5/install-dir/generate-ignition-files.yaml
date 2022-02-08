@@ -6,7 +6,8 @@
     master_ignition_content: "{{ lookup('file', master_ignition_file) }}"
     certificate_bundle_line: "{{ master_ignition_content | json_query('ignition.security.tls.certificateAuthorities[0].source') }}"
     worker_ignition_file: "../scripts/{{ cluster_name }}.{{ cluster_domain }}/worker.ign"
-    worker_certificate_bundle_line: "{{ worker_ignition_file | json_query('ignition.security.tls.certificateAuthorities[0].source') }}"
+    worker_ignition_content: "{{ lookup('file', master_ignition_file) }}"
+    worker_certificate_bundle_line: "{{ worker_ignition_content | json_query('ignition.security.tls.certificateAuthorities[0].source') }}"
 
   tasks:
     - name: generate light bootstrap ignition files
